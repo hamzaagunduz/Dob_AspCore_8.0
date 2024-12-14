@@ -17,6 +17,10 @@ namespace Persistence.Context
         }
 
         public DbSet<About> Abouts { get; set; }
+        public DbSet<Exam> Exams { get; set; }
+        public DbSet<Topic> Topics { get; set; }
+        public DbSet<Test> Tests { get; set; }
+        public DbSet<Question> Questions { get; set; }
 
     }
 }
