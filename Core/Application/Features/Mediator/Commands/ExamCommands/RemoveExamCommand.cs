@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Mediator.Commands.ExamCommands
 {
-    public class DeleteExamCommand : IRequest
+    public class RemoveExamCommand : IRequest
     {
-        public int ExamID { get; set; }
+        public RemoveExamCommand(int id)
+        {
+            Id = id;
+        }
+
+        public int Id { get; set; }
     }
 }
