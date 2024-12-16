@@ -10,11 +10,12 @@ namespace Domain.Entities
     {
         public int QuestionID { get; set; } // Birincil Anahtar
         public string Text { get; set; } // Sorunun metni
-        public string Answer { get; set; } // Doğru cevap
+        public int Answer { get; set; } // Doğru cevap
         public string OptionA { get; set; }
         public string OptionB { get; set; }
         public string OptionC { get; set; }
         public string OptionD { get; set; }
+        public string OptionE { get; set; }
 
         // Yabancı Anahtar
         public int TestID { get; set; } // Hangi teste ait

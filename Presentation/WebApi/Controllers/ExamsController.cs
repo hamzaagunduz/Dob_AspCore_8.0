@@ -45,14 +45,14 @@ namespace WebApi.Controllers
         public async Task<IActionResult> UpdateExam([FromBody] UpdateExamCommand command)
         {
             await _mediator.Send(command);
-            return NoContent();
+            return Ok("Exam successfully Update.");
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteExam(int id)
+        public async Task<IActionResult> RemoveExam(int id)
         {
             await _mediator.Send(new RemoveExamCommand(id));
-            return NoContent();
+            return Ok("Exam successfully Remove.");
         }
 
 
