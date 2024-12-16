@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Context
 {
-    public class DobContext:DbContext
+    public class DobContext:IdentityDbContext<AppUser, AppRole, int>
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

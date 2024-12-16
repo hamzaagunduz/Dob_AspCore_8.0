@@ -1,6 +1,8 @@
 using Application.Interfaces;
 using Application.Services;
+using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Persistence.Context;
 using Persistence.Repositories;
 using System.Reflection;
@@ -19,7 +21,16 @@ builder.Services.AddSwaggerGen();
 
 
 
-builder.Services.AddScoped<DobContext>();
+//builder.Services.AddScoped<DobContext>();
+
+builder.Services.AddIdentity<AppUser, AppRole>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = true;
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+})
+.AddEntityFrameworkStores<DobContext>()
+.AddDefaultTokenProviders();
+
 
 var app = builder.Build();
 
