@@ -21,7 +21,7 @@ builder.Services.AddSwaggerGen();
 
 
 
-//builder.Services.AddScoped<DobContext>();
+builder.Services.AddScoped<DobContext>();
 
 builder.Services.AddIdentity<AppUser, AppRole>(options =>
 {
@@ -30,6 +30,10 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
 })
 .AddEntityFrameworkStores<DobContext>()
 .AddDefaultTokenProviders();
+
+
+
+
 
 
 var app = builder.Build();
@@ -46,6 +50,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();  // Add this line to ensure authentication middleware is used
 app.UseAuthorization();
 
 app.MapControllers();
