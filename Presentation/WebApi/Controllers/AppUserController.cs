@@ -1,5 +1,6 @@
 ﻿using Application.Features.Mediator.Commands.AppUserCommands;
 using Application.Features.Mediator.Queries.AppUserQueries;
+using Application.Tools;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -52,19 +53,19 @@ namespace WebApi.Controllers
         }
 
 
-        //[HttpPost("LoginToken")]
-        //public async Task<IActionResult> LoginToken(GetCheckAppUserQuery query)
-        //{
-        //    var values = await _mediator.Send(query);
-        //    if (values.IsExist)
-        //    {
-        //        return Created("", JwtTokenGenerator.GenerateToken(values));
-        //    }
-        //    else
-        //    {
-        //        return BadRequest("Kullanıcı adı veya şifre hatalıdır");
-        //    }
-        //}
+        [HttpPost("LoginToken")]
+        public async Task<IActionResult> LoginToken(GetCheckAppUserQuery query)
+        {
+            var values = await _mediator.Send(query);
+            if (values.IsExist)
+            {
+                return Created("", JwtTokenGenerator.GenerateToken(values));
+            }
+            else
+            {
+                return BadRequest("Kullanıcı adı veya şifre hatalıdır");
+            }
+        }
 
         [HttpGet("GetUserProfile")]
 
