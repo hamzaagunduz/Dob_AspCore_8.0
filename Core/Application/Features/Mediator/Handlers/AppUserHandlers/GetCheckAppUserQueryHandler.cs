@@ -39,7 +39,7 @@ namespace Application.Features.Mediator.Handlers.AppUserHandlers
                     values.IsExist = true;
                 values.UserName = user.UserName;
                 values.Id = user.Id;
-                var userRoles = await _userManager.GetRolesAsync(user);
+                //var userRoles = await _userManager.GetRolesAsync(user);
 
             }
             return values;

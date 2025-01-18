@@ -12,6 +12,8 @@ namespace Application.Features.Mediator.Commands.ExamCommands
 
 
         public string Name { get; set; }
+        public bool? Selected { get; set; } // Örneğin: YKS, ALES
+
         public DateTime? Year { get; set; }
     }
 }

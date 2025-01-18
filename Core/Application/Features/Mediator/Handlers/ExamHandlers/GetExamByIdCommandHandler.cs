@@ -29,6 +29,7 @@ namespace Application.Features.Mediator.Handlers.ExamHandlers
             {
                 ExamID = values.ExamID,
                 Name = values.Name,
+                Selected=values.Selected,
                 Year = values.Year
             };
         }

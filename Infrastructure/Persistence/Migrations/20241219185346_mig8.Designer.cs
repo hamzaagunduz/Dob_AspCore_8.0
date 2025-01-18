@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DobContext))]
-    partial class DobContextModelSnapshot : ModelSnapshot
+    [Migration("20241219185346_mig8")]
+    partial class mig8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("AppUserFlashCard", (string)null);
+                    b.ToTable("AppUserFlashCard");
                 });
 
             modelBuilder.Entity("Domain.Entities.About", b =>
@@ -59,7 +62,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("AboutID");
 
-                    b.ToTable("Abouts", (string)null);
+                    b.ToTable("Abouts");
                 });
 
             modelBuilder.Entity("Domain.Entities.AppRole", b =>
@@ -197,7 +200,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ExamID");
 
-                    b.ToTable("Course", (string)null);
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("Domain.Entities.Exam", b =>
@@ -220,7 +223,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("ExamID");
 
-                    b.ToTable("Exams", (string)null);
+                    b.ToTable("Exams");
                 });
 
             modelBuilder.Entity("Domain.Entities.FlashCard", b =>
@@ -247,7 +250,7 @@ namespace Persistence.Migrations
                     b.HasIndex("QuestionID")
                         .IsUnique();
 
-                    b.ToTable("FlashCard", (string)null);
+                    b.ToTable("FlashCard");
                 });
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
@@ -292,7 +295,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("TestID");
 
-                    b.ToTable("Questions", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Test", b =>
@@ -317,7 +320,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("TopicID");
 
-                    b.ToTable("Tests", (string)null);
+                    b.ToTable("Tests");
                 });
 
             modelBuilder.Entity("Domain.Entities.Topic", b =>
@@ -342,7 +345,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("CourseID");
 
-                    b.ToTable("Topics", (string)null);
+                    b.ToTable("Topics");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

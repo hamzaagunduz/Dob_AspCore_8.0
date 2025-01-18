@@ -1,14 +1,17 @@
 ﻿using Application.Features.Mediator.Commands.ExamCommands;
 using Application.Features.Mediator.Queries.ExamQueries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+    [Route("api/[controller]")]
+
     public class ExamsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -54,7 +57,13 @@ namespace WebApi.Controllers
             await _mediator.Send(new RemoveExamCommand(id));
             return Ok("Exam successfully Remove.");
         }
-
+        [HttpPut("select/{id}")]
+        public async Task<IActionResult> SelectExam(int id)
+        {
+            // SelectExamCommand ile sınavı seç
+            await _mediator.Send(new SelectExamCommand { ExamID = id });
+            return Ok("Exam successfully selected.");
+        }
 
     }
 }
