@@ -9,7 +9,6 @@ using System.Threading;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
 
     public class ExamsController : ControllerBase

@@ -10,7 +10,6 @@ namespace Application.Interfaces.IExamRepository
     public interface IExamRepository
     {
          Task<Exam> GetByIdAsync(int id);
-         Task DeselectAllExams();
          Task UpdateAsync(Exam exam);
     }
 }

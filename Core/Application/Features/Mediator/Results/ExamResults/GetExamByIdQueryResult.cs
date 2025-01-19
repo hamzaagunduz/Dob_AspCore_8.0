@@ -10,7 +10,6 @@ namespace Application.Features.Mediator.Results.ExamResults
     {
         public int ExamID { get; set; }
         public string Name { get; set; }
-        public bool? Selected { get; set; } // Örneğin: YKS, ALES
 
         public DateTime? Year { get; set; }
     }

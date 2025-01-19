@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Application.Interfaces.IExamRepository;
+using Application.Interfaces.ITopicRepository;
 using Application.Services;
 using Application.Tools;
 using Domain.Entities;
@@ -10,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Persistence.Context;
 using Persistence.Repositories;
+using Persistence.Repositories.Repository;
 using Persistence.Repositories.Repository.Infrastructure.Persistence.Repositories;
 using System.Text;
 
@@ -59,6 +61,7 @@ builder.Services.AddScoped<DobContext>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IExamRepository), typeof(ExamRepository));
+builder.Services.AddScoped(typeof(ITopicRepository), typeof(TopicRepository));
 
 
 builder.Services.AddApplicationService(builder.Configuration);

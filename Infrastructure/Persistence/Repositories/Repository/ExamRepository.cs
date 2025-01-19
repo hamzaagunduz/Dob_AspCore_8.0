@@ -29,17 +29,7 @@ namespace Persistence.Repositories.Repository
                 return await _context.Set<Exam>().FindAsync(id);
             }
 
-            public async Task DeselectAllExams()
-            {
-                var exams = await _context.Set<Exam>()
-                                           .Where(e => e.Selected == true)
-                                           .ToListAsync();
-                foreach (var exam in exams)
-                {
-                    exam.Selected = false;
-                }
-                await _context.SaveChangesAsync();
-            }
+
 
             public async Task UpdateAsync(Exam exam)
             {

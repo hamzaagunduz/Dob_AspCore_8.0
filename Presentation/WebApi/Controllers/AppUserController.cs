@@ -79,5 +79,21 @@ namespace WebApi.Controllers
 
             return Ok(new { UserId = userId, Username = User.Identity.Name });
         }
+
+        [HttpPut("UpdateUserExam")]
+        public async Task<IActionResult> UpdateAppUserExam([FromBody] UpdateAppUserExamCommand command)
+        {
+            // Sınav ID'si ve kullanıcı ID'si validasyonları yapılabilir
+            if (command.UserId <= 0 || command.ExamID <= 0)
+            {
+                return BadRequest("Geçersiz kullanıcı ID'si veya sınav ID'si.");
+            }
+
+            // Komutu MediatR üzerinden işleme gönderiyoruz
+            await _mediator.Send(command);
+            return Ok("Kullanıcının sınavı başarıyla güncellendi.");
+        }
+
+
     }
 }

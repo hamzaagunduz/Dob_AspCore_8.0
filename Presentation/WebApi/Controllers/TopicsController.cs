@@ -51,5 +51,13 @@ namespace WebApi.Controllers
             await _mediator.Send(new RemoveTopicCommand(id));
             return Ok("Topic successfully removed.");
         }
+
+        [HttpGet("course/{courseId}")]
+        public async Task<IActionResult> GetTopicsWithTestsByCourseId(int courseId)
+        {
+            var topicsWithTests = await _mediator.Send(new GetTopicsWithTestsByCourseIdQuery(courseId));
+            return Ok(topicsWithTests);
+        }
+
     }
 }

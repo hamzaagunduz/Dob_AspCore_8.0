@@ -10,7 +10,6 @@ namespace Domain.Entities
     {
         public int ExamID { get; set; } // Birincil Anahtar
         public string Name { get; set; } // Örneğin: YKS, ALES
-        public bool? Selected { get; set; } // Örneğin: YKS, ALES
         public DateTime? Year { get; set; } 
 
         // Bire-Çoğul İlişki: Exam -> Course

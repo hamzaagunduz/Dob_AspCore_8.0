@@ -30,16 +30,7 @@ namespace Application.Features.Mediator.Handlers.ExamHandlers
             }
 
             // Eğer bu sınav zaten seçiliyse (Selected == true) hiçbir işlem yapma
-            if (exam.Selected == true)
-             {
-                return;
-            }
 
-            // Diğer tüm sınavları seçilmemiş hale getir
-            await _examRepository.DeselectAllExams();
-
-            // Seçilen sınavın Selected durumunu true yap
-            exam.Selected = true;
             await _examRepository.UpdateAsync(exam);
 
         }

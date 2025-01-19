@@ -28,7 +28,6 @@ namespace Application.Features.Mediator.Handlers.ExamHandlers
             await _repository.CreateAsync(new Exam
             {
                 Name = request.Name,
-                Selected=request.Selected,
                 Year = request.Year
             });
         }

@@ -27,7 +27,6 @@ namespace Application.Features.Mediator.Handlers.ExamHandlers
             {
                 ExamID = x.ExamID,
                 Name = x.Name,
-                Selected=x.Selected,
                 Year = x.Year
             }).ToList();
         }
