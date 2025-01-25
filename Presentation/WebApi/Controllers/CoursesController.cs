@@ -51,5 +51,14 @@ namespace WebApi.Controllers
             await _mediator.Send(new RemoveCourseCommand(id));
             return Ok("Course successfully removed.");
         }
+
+        [HttpGet("GetCoursesByExamId/{examId}")]
+        public async Task<IActionResult> GetCoursesByExamId(int examId)
+        {
+            var query = new GetCoursesByExamIdQuery(examId);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
     }
 }

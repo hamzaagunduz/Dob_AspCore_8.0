@@ -52,5 +52,13 @@ namespace WebApi.Controllers
             await _mediator.Send(new RemoveFlashCardCommand(id));
             return Ok("FlashCard successfully deleted.");
         }
+
+        [HttpGet("GetFlashCardsByQuestionId/{questionId}")]
+        public async Task<IActionResult> GetFlashCardsByQuestionId(int questionId)
+        {
+            var query = new GetFlashCardsByQuestionIdQuery(questionId);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
     }
 }

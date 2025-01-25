@@ -22,6 +22,7 @@ namespace Persistence.Context
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<Question> Questions { get; set; }
+        public DbSet<FlashCard> FlashCards { get; set; }
 
     }
 }

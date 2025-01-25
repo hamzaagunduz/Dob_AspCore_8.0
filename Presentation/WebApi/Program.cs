@@ -1,5 +1,8 @@
 using Application.Interfaces;
+using Application.Interfaces.ICourseRepository;
 using Application.Interfaces.IExamRepository;
+using Application.Interfaces.IFlashCardRepository;
+using Application.Interfaces.IQuestionRepository;
 using Application.Interfaces.ITopicRepository;
 using Application.Services;
 using Application.Tools;
@@ -62,6 +65,9 @@ builder.Services.AddScoped<DobContext>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IExamRepository), typeof(ExamRepository));
 builder.Services.AddScoped(typeof(ITopicRepository), typeof(TopicRepository));
+builder.Services.AddScoped(typeof(ICourseRepository), typeof(CourseRepository));
+builder.Services.AddScoped(typeof(IQuestionRepository), typeof(QuestionRepository));
+builder.Services.AddScoped(typeof(IFlashCardRepository), typeof(FlashCardRepository));
 
 
 builder.Services.AddApplicationService(builder.Configuration);

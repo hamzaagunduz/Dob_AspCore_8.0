@@ -51,5 +51,14 @@ namespace WebApi.Controllers
             await _mediator.Send(new RemoveQuestionCommand(id));
             return Ok("Question successfully deleted.");
         }
+
+        [HttpGet("GetQuestionsByTestId/{testId}")]
+        public async Task<IActionResult> GetQuestionsByTestId(int testId)
+        {
+            var query = new GetQuestionsByTestIdQuery(testId);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
     }
 }
