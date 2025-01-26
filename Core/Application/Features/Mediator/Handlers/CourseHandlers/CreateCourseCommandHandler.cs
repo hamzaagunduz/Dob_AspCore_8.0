@@ -25,6 +25,7 @@ namespace Application.Features.Mediator.Handlers.CourseHandlers
             {
                 Name = request.Name,
                 Description = request.Description,
+                IconURL = request.IconURL,
                 ExamID = request.ExamID
             });
         }

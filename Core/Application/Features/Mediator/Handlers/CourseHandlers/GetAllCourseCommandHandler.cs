@@ -28,6 +28,7 @@ namespace Application.Features.Mediator.Handlers.CourseHandlers
                 CourseID = c.CourseID,
                 Name = c.Name,
                 Description = c.Description,
+                IconURL=c.IconURL,
                 ExamID = c.ExamID
             }).ToList();
         }

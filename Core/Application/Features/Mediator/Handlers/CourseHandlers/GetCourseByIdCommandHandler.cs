@@ -33,6 +33,7 @@ namespace Application.Features.Mediator.Handlers.CourseHandlers
                 CourseID = course.CourseID,
                 Name = course.Name,
                 Description = course.Description,
+                IconURL=course.IconURL,
                 ExamID = course.ExamID
             };
         }

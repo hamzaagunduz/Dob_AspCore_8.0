@@ -11,6 +11,7 @@ namespace Domain.Entities
         public int CourseID { get; set; } // Birincil Anahtar
         public string Name { get; set; } // Örneğin: Matematik, Tarih
         public string? Description { get; set; } 
+        public string? IconURL { get; set; } 
 
         
         // Yabancı Anahtar
