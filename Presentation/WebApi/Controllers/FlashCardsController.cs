@@ -60,5 +60,36 @@ namespace WebApi.Controllers
             var result = await _mediator.Send(query);
             return Ok(result);
         }
+
+        [HttpGet("GetFlashCardsByTestId/{testId}")]
+        public async Task<IActionResult> GetFlashCardsBytestId(int testId)
+        {
+            var query = new GetFlashCardsByTestIdQuery(testId);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpPost("ToggleUserFlashCard")]
+        public async Task<IActionResult> ToggleUserFlashCard([FromBody] AddUserFlashCardCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok("Favori flashcard başarıyla güncellendi.");
+        }
+
+        [HttpGet("IsFavorite")]
+        public async Task<IActionResult> IsFavorite([FromQuery] int userId, [FromQuery] int flashCardId)
+        {
+            var result = await _mediator.Send(new IsFlashCardFavoriteQuery(userId, flashCardId));
+            return Ok(result); // true veya false
+        }
+
+        [HttpGet("favorites/bycourse")]
+        public async Task<IActionResult> GetUserFavoriteFlashCardsByCourse([FromQuery] int appUserId, [FromQuery] int courseId)
+        {
+            var query = new GetUserFavoriteFlashCardsByCourseQuery(appUserId, courseId);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
     }
 }

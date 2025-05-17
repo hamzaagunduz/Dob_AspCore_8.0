@@ -16,9 +16,7 @@ namespace Domain.Entities
         public string? ImageURL { get; set; } //Profil Resmi
         public int? ExamID { get; set; } // Hangi Sınava Çalıştığı
 
-        public ICollection<FlashCard> FlashCards { get; set; } = new List<FlashCard>();
-
-
+        public ICollection<AppUserFlashCard> AppUserFlashCards { get; set; } = new List<AppUserFlashCard>();
 
     }
 }

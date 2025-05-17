@@ -15,7 +15,7 @@ namespace Domain.Entities
         // Yabancı Anahtar
         public int QuestionID { get; set; } // Hangi soruya ait
         public Question Question { get; set; } // İlişki
-        public ICollection<AppUser> Users { get; set; } = new List<AppUser>();
+        public ICollection<AppUserFlashCard> AppUserFlashCards { get; set; } = new List<AppUserFlashCard>();
 
     }
 
