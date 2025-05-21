@@ -15,11 +15,15 @@ namespace Application.Tools
     {
         public static TokenResponseDto GenerateToken(GetCheckAppUserQueryResult result)
         {
-            var claims = new List<Claim>();
-
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, result.Id.ToString()),
+                new Claim("userId", result.Id.ToString())
+            };
 
 
             claims.Add(new Claim(ClaimTypes.NameIdentifier, result.Id.ToString()));
+
 
             if (!string.IsNullOrWhiteSpace(result.UserName))
                 claims.Add(new Claim("Username", result.UserName));

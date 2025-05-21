@@ -48,12 +48,14 @@ public class FlashCardRepository : IFlashCardRepository
               .ToListAsync();
     }
 
-    public async Task<List<FlashCard>> GetFlashCardsByTestIdAsync(int testId)
-    {
+public async Task<List<FlashCard>> GetFlashCardsByTestIdAsync(int testId)
+{
         return await _context.FlashCards
             .Include(fc => fc.Question)
+            .Include(fc => fc.AppUserFlashCards) // favori bilgileri için gerekli
             .Where(fc => fc.Question.TestID == testId)
             .ToListAsync();
-    }
+}
+
 
 }

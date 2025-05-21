@@ -94,6 +94,16 @@ namespace WebApi.Controllers
             return Ok("Kullanıcının sınavı başarıyla güncellendi.");
         }
 
+        [HttpPost("decreaselife/{userId}")]
+        public async Task<IActionResult> DecreaseLife(int userId)
+        {
+            var result = await _mediator.Send(new DecreaseLifeCommand(userId));
+            if (!result)
+                return BadRequest("User not found or no lives left.");
+
+            return Ok("Life decreased successfully.");
+        }
+
 
     }
 }

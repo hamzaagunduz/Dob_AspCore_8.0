@@ -62,9 +62,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("GetFlashCardsByTestId/{testId}")]
-        public async Task<IActionResult> GetFlashCardsBytestId(int testId)
+        public async Task<IActionResult> GetFlashCardsBytestId(int testId,int userId)
         {
-            var query = new GetFlashCardsByTestIdQuery(testId);
+            var query = new GetFlashCardsByTestIdQuery(testId,userId);
             var result = await _mediator.Send(query);
             return Ok(result);
         }

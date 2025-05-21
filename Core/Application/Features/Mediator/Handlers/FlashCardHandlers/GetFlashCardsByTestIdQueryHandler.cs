@@ -8,7 +8,7 @@ using Application.Features.Mediator.Results.FlashCardResults;
 using Application.Interfaces;
 using Application.Features.Mediator.Queries.FlashCardQuery;
 
-public class GetFlashCardsByTestIdQueryHandler : IRequestHandler<GetFlashCardsByTestIdQuery, List<GetFlashCardsByQuestionIdQueryResult>>
+public class GetFlashCardsByTestIdQueryHandler : IRequestHandler<GetFlashCardsByTestIdQuery, List<GetFlashCardsByTestIdQueryResult>>
 {
     private readonly IFlashCardRepository _flashCardRepository;
 
@@ -17,20 +17,25 @@ public class GetFlashCardsByTestIdQueryHandler : IRequestHandler<GetFlashCardsBy
         _flashCardRepository = flashCardRepository;
     }
 
-    public async Task<List<GetFlashCardsByQuestionIdQueryResult>> Handle(GetFlashCardsByTestIdQuery request, CancellationToken cancellationToken)
+    public async Task<List<GetFlashCardsByTestIdQueryResult>> Handle(GetFlashCardsByTestIdQuery request, CancellationToken cancellationToken)
     {
 
-        var flashCard = await _flashCardRepository.GetFlashCardsByTestIdAsync(request.TestID);
-        if (flashCard != null)
+        var flashCards = await _flashCardRepository.GetFlashCardsByTestIdAsync(request.TestID);
+        var userId = request.UserID; 
+
+        if (flashCards != null)
         {
-            return flashCard.Select(flashCard => new GetFlashCardsByQuestionIdQueryResult
+            return flashCards.Select(flashCard => new GetFlashCardsByTestIdQueryResult
             {
                 FlashCardID = flashCard.FlashCardID,
                 Front = flashCard.Front,
                 Back = flashCard.Back,
-                QuestionID = flashCard.QuestionID
+                QuestionID = flashCard.QuestionID,
+                isFavoried = flashCard.AppUserFlashCards.Any(f => f.AppUserID == userId)
             }).ToList();
         }
+
         return null;
+
     }
 }

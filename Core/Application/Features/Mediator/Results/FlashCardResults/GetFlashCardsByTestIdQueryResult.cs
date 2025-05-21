@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Mediator.Results.FlashCardResults
 {
-    public class GetFlashCardsByQuestionIdQueryResult
+    public class GetFlashCardsByTestIdQueryResult
     {
         public int FlashCardID { get; set; }
         public string Front { get; set; }
@@ -14,5 +14,4 @@ namespace Application.Features.Mediator.Results.FlashCardResults
         public int QuestionID { get; set; }
         public bool isFavoried { get; set; }
     }
-
 }

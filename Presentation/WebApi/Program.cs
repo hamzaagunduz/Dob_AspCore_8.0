@@ -4,6 +4,7 @@ using Application.Interfaces.IExamRepository;
 using Application.Interfaces.IFlashCardRepository;
 using Application.Interfaces.IQuestionRepository;
 using Application.Interfaces.ITopicRepository;
+using Application.Interfaces.IUserRepository;
 using Application.Services;
 using Application.Tools;
 using Domain.Entities;
@@ -16,6 +17,7 @@ using Persistence.Context;
 using Persistence.Repositories;
 using Persistence.Repositories.Repository;
 using Persistence.Repositories.Repository.Infrastructure.Persistence.Repositories;
+using Persistence.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -68,6 +70,10 @@ builder.Services.AddScoped(typeof(ITopicRepository), typeof(TopicRepository));
 builder.Services.AddScoped(typeof(ICourseRepository), typeof(CourseRepository));
 builder.Services.AddScoped(typeof(IQuestionRepository), typeof(QuestionRepository));
 builder.Services.AddScoped(typeof(IFlashCardRepository), typeof(FlashCardRepository));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+//can yenileme
+builder.Services.AddHostedService<LifeRegenerationService>();
 
 
 builder.Services.AddApplicationService(builder.Configuration);
