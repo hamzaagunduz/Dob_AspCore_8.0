@@ -5,6 +5,7 @@ using Application.Interfaces.IFlashCardRepository;
 using Application.Interfaces.IQuestionRepository;
 using Application.Interfaces.ITopicRepository;
 using Application.Interfaces.IUserRepository;
+using Application.Interfaces.IUserStatisticsRepository;
 using Application.Services;
 using Application.Tools;
 using Domain.Entities;
@@ -70,6 +71,7 @@ builder.Services.AddScoped(typeof(ITopicRepository), typeof(TopicRepository));
 builder.Services.AddScoped(typeof(ICourseRepository), typeof(CourseRepository));
 builder.Services.AddScoped(typeof(IQuestionRepository), typeof(QuestionRepository));
 builder.Services.AddScoped(typeof(IFlashCardRepository), typeof(FlashCardRepository));
+builder.Services.AddScoped(typeof(IUserStatisticsRepository), typeof(UserStatisticsRepository));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //can yenileme

@@ -34,6 +34,17 @@ namespace Persistence.Repositories.Repository
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<(int Lives, DateTime? LastLifeAddedTime)> GetLivesAndLastLifeAddedTimeAsync(int userId)
+        {
+            var user = await _context.Users
+                .Where(u => u.Id == userId)
+                .Select(u => new { u.Lives, u.LastLifeAddedTime })
+                .FirstOrDefaultAsync();
+
+
+            return (user.Lives, user.LastLifeAddedTime);
+        }
     }
 
 }

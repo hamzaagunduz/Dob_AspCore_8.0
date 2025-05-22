@@ -12,6 +12,9 @@ namespace Application.Interfaces.IUserRepository
         Task<List<AppUser>> GetAllAsync();
         Task<AppUser?> GetByIdAsync(int id);
         Task UpdateAsync(AppUser user);
+
+        Task<(int Lives, DateTime? LastLifeAddedTime)> GetLivesAndLastLifeAddedTimeAsync(int userId);
+
     }
 
 }

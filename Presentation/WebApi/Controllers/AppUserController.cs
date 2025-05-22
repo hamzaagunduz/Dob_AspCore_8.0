@@ -104,6 +104,17 @@ namespace WebApi.Controllers
             return Ok("Life decreased successfully.");
         }
 
+        [HttpGet("lives/{userId}")]
+        public async Task<IActionResult> GetLivesInfo(int userId)
+        {
+            var result = await _mediator.Send(new GetHealtByUserIdQuery(userId));
+            if (result == null)
+                return NotFound("User not found.");
+
+            return Ok(result);
+        }
+
+
 
     }
 }
