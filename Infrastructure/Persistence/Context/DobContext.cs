@@ -24,6 +24,8 @@ namespace Persistence.Context
         public DbSet<Question> Questions { get; set; }
         public DbSet<FlashCard> FlashCards { get; set; }
         public DbSet<UserStatistics> UserStatistics { get; set; }
+        public DbSet<DailyMission> DailyMissions { get; set; }
+        public DbSet<UserDailyMission> UserDailyMissions { get; set; }
 
     }
 }
