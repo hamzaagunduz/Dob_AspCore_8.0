@@ -10,17 +10,21 @@ using Application.Interfaces.IUserStatisticsRepository;
 using Application.Services;
 using Application.Tools;
 using Domain.Entities;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.SemanticKernel;
+using OpenAI;
 using Persistence.Context;
 using Persistence.Repositories;
 using Persistence.Repositories.Repository;
 using Persistence.Repositories.Repository.Infrastructure.Persistence.Repositories;
 using Persistence.Services;
+using System.ClientModel;
 using System.Text;
+using WebApi.Hubs;
+using WebApi.Services;
+using static WebApi.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +33,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer()
     .AddProblemDetails();
 
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<AIService>();
+
+
+builder.Services
+    .AddKernel()
+    .AddOpenAIChatCompletion(
+        modelId: "google/gemini-flash-1.5-8b",
+        openAIClient: new OpenAIClient(
+            credential: new ApiKeyCredential("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"),
+            options: new OpenAIClientOptions
+            {
+                Endpoint = new Uri("https://openrouter.ai/api/v1")
+            })
+    );
+   
 
 //builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
@@ -162,17 +182,6 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-//Default Þema yazdýmra
-//app.Use(async (context, next) =>
-//{
-//    var defaultScheme = context.RequestServices
-//        .GetRequiredService<IOptions<AuthenticationOptions>>()
-//        .Value.DefaultAuthenticateScheme;
-
-//    Console.WriteLine($"Default Authenticate Scheme: {defaultScheme}");
-
-//    await next();
-//});
 
 
 app.UseCors();
@@ -182,6 +191,16 @@ app.UseHttpsRedirection();
 app.UseAuthentication();  // Add this line to ensure authentication middleware is used
 app.UseAuthorization();
 
+app.MapHub<AIHub>("ai-hub");
+
 app.MapControllers();
+
+
+
+app.MapPost("/chat2", async (AIService aiService, ChatRequestVM request) =>
+{
+    string response = await aiService.GetMessageAsync(request.Prompt);
+    return Results.Ok(new { Message = response });
+});
 
 app.Run();
