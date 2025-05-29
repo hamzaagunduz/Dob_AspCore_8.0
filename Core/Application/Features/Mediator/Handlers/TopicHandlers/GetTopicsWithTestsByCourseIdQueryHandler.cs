@@ -28,6 +28,7 @@ namespace Application.Features.Mediator.Handlers.TopicHandlers
                 TopicID = topic.TopicID,
                 Name = topic.Name,
                 Description = topic.Description,
+                VideoLink = topic.VideoLink,
                 Tests = topic.Tests.Select(test => new TestDto
                 {
                     TestID = test.TestID,

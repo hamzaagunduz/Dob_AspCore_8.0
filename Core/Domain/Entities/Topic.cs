@@ -12,6 +12,7 @@ namespace Domain.Entities
         public int TopicID { get; set; } // Birincil Anahtar
         public string Name { get; set; } // Örneğin: Temel Aritmetik, Sayı Sistemleri
         public string? Description { get; set; }
+        public string? VideoLink { get; set; }
 
 
         // Yabancı Anahtar

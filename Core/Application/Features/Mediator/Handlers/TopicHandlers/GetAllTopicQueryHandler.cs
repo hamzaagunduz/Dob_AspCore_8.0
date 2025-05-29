@@ -27,6 +27,7 @@ namespace Application.Features.Mediator.Handlers.TopicHandlers
                 TopicID = topic.TopicID,
                 Name = topic.Name,
                 Description = topic.Description,
+                VideoLink = topic.VideoLink,
                 CourseID = topic.CourseID
             }).ToList();
         }

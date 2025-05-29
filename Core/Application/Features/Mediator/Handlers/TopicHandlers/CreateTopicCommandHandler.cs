@@ -22,6 +22,7 @@ namespace Application.Features.Mediator.Handlers.TopicHandlers
             {
                 Name = request.Name,
                 Description = request.Description,
+                VideoLink=request.VideoLink,
                 CourseID = request.CourseID
             };
 
