@@ -30,6 +30,19 @@ namespace Persistence.Repositories.Repository
             await _context.SaveChangesAsync();
             return item;
         }
+
+        public async Task AddUserShopItemAsync(UserShopItem userShopItem)
+        {
+            _context.UserShopItems.Add(userShopItem);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<UserShopItem>> GetUserShopItemsByUserIdAsync(int userId)
+        {
+            return await _context.UserShopItems
+                .Where(x => x.AppUserId == userId && x.ExpirationDate > DateTime.UtcNow)
+                .ToListAsync();
+        }
     }
 
 }

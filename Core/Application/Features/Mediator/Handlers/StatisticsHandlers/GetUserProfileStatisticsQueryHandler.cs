@@ -37,6 +37,7 @@ namespace Application.Features.Mediator.Handlers.StatisticsHandlers
                 SurName = user.SurName,
                 Email = user.Email,
                 Lives = user.Lives,
+                Diamond = user.Diamond,
                 TotalScore = stats.TotalScore,
                 TotalTestsCompleted = stats.TotalTestsCompleted,
                 PerfectTestsCompleted = stats.PerfectTestsCompleted,

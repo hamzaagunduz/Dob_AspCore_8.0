@@ -14,6 +14,9 @@ namespace Domain.Entities
         public int Price { get; set; } // Diamond olarak fiyat
         public string Color { get; set; } // "orange", "purple" gibi
         public string ImageUrl { get; set; } // Görsel yolu
+
+        public int DurationInDays { get; set; } // Örn: 30
+
     }
 
 }

@@ -20,6 +20,8 @@ namespace Domain.Entities
         public DateTime? LastLifeAddedTime { get; set; } = DateTime.UtcNow;
 
         public ICollection<AppUserFlashCard> AppUserFlashCards { get; set; } = new List<AppUserFlashCard>();
+        public ICollection<UserShopItem> UserShopItems { get; set; } = new List<UserShopItem>();
+
 
     }
 }

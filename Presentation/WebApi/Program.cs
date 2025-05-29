@@ -45,7 +45,7 @@ builder.Services
     .AddOpenAIChatCompletion(
         modelId: "google/gemini-flash-1.5-8b",
         openAIClient: new OpenAIClient(
-            credential: new ApiKeyCredential("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"),
+            credential: new ApiKeyCredential("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"),
             options: new OpenAIClientOptions
             {
                 Endpoint = new Uri("https://openrouter.ai/api/v1")

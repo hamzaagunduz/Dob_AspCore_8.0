@@ -14,5 +14,7 @@ namespace Application.Features.Mediator.Results.AppUserResults
         public string Email { get; set; }
         public string? ImageURL { get; set; } //Profil Resmi
         public int? ExamID { get; set; } // Hangi Sınava Çalıştığı
+        public int? Diamond { get; set; } // Hangi Sınava Çalıştığı
+
     }
 }

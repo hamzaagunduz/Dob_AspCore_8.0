@@ -30,7 +30,8 @@ namespace Application.Features.Mediator.Handlers.AppUserHandlers
                 SurName = values.SurName,
                 ExamID = values.ExamID,
                 FirstName = values.FirstName,
-                ImageURL = values.ImageURL
+                ImageURL = values.ImageURL,
+                Diamond = values.Diamond,
 
             };
         }

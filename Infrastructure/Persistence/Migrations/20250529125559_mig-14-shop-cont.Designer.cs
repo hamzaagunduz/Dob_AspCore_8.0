@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DobContext))]
-    partial class DobContextModelSnapshot : ModelSnapshot
+    [Migration("20250529125559_mig-14-shop-cont")]
+    partial class mig14shopcont
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -480,7 +483,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ShopItemId");
 
-                    b.ToTable("UserShopItems");
+                    b.ToTable("UserShopItem");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserStatistics", b =>

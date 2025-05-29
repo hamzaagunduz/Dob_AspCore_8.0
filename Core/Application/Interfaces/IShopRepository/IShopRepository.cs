@@ -11,6 +11,9 @@ namespace Application.Interfaces.IShopRepository
     {
         Task<List<ShopItem>> GetAllAsync();
         Task<ShopItem> AddAsync(ShopItem item);
+        Task AddUserShopItemAsync(UserShopItem userShopItem);
+        Task<List<UserShopItem>> GetUserShopItemsByUserIdAsync(int userId);
+
     }
 
 }

@@ -32,5 +32,24 @@ namespace WebAPI.Controllers
             await _mediator.Send(command);
             return Ok(new { message = "Shop item created successfully." });
         }
+
+        [HttpPost("purchase")]
+        public async Task<IActionResult> PurchaseShopItem([FromBody] PurchaseShopItemCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (result == "Success")
+                return Ok(new { message = "Purchase successful." });
+
+            return BadRequest(new { error = result });
+        }
+
+        [HttpGet("items/{userId}")]
+        public async Task<IActionResult> GetShopItemsWithUserStatus(int userId)
+        {
+            var result = await _mediator.Send(new GetShopItemsWithUserStatusQuery { UserId = userId });
+            return Ok(result);
+        }
+
     }
 }
