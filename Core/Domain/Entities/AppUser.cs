@@ -22,6 +22,8 @@ namespace Domain.Entities
         public ICollection<AppUserFlashCard> AppUserFlashCards { get; set; } = new List<AppUserFlashCard>();
         public ICollection<UserShopItem> UserShopItems { get; set; } = new List<UserShopItem>();
 
+        public ICollection<UserTopicPerformance> TopicPerformances { get; set; }
+
 
     }
 }

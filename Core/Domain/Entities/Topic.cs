@@ -20,6 +20,8 @@ namespace Domain.Entities
 
         // Bire-Çoğul İlişki: Topic -> Test
         public ICollection<Test> Tests { get; set; }
+        public ICollection<UserTopicPerformance> TopicPerformances { get; set; }
+
     }
 
 }

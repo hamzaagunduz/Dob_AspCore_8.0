@@ -28,6 +28,8 @@ namespace Persistence.Context
         public DbSet<UserDailyMission> UserDailyMissions { get; set; }
         public DbSet<ShopItem> ShopItems { get; set; }
         public DbSet<UserShopItem> UserShopItems { get; set; }
+        public DbSet<UserTopicPerformance> UserTopicPerformances { get; set; }
+
 
     }
 }

@@ -10,6 +10,7 @@ using Application.Interfaces.ITopicRepository;
 using Application.Interfaces.IUserDailyMissionRepository;
 using Application.Interfaces.IUserRepository;
 using Application.Interfaces.IUserStatisticsRepository;
+using Application.Interfaces.IUserTopicPerformanceRepository;
 using Application.Services;
 using Application.Tools;
 using Domain.Entities;
@@ -98,6 +99,8 @@ builder.Services.AddScoped(typeof(IFlashCardRepository), typeof(FlashCardReposit
 builder.Services.AddScoped(typeof(IUserStatisticsRepository), typeof(UserStatisticsRepository));
 builder.Services.AddScoped(typeof(IUserDailyMissionRepository), typeof(UserDailyMissionRepository));
 builder.Services.AddScoped(typeof(IShopRepository), typeof(ShopRepository));
+builder.Services.AddScoped(typeof(IUserTopicPerformanceRepository), typeof(UserTopicPerformanceRepository));
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //can yenileme
