@@ -26,6 +26,7 @@ namespace Persistence.Context
         public DbSet<UserStatistics> UserStatistics { get; set; }
         public DbSet<DailyMission> DailyMissions { get; set; }
         public DbSet<UserDailyMission> UserDailyMissions { get; set; }
+        public DbSet<ShopItem> ShopItems { get; set; }
 
     }
 }

@@ -114,7 +114,15 @@ namespace WebApi.Controllers
             return Ok(result);
         }
 
+        [HttpPost("purchase-diamonds")]
+        public async Task<IActionResult> PurchaseDiamonds([FromBody] PurchaseDiamondCommand command)
+        {
+            var result = await _mediator.Send(command);
+            if (!result)
+                return BadRequest("Purchase failed.");
 
+            return Ok("Purchase successful.");
+        }
 
     }
 }

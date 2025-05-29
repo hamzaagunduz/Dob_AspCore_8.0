@@ -3,6 +3,9 @@ using Application.Interfaces.ICourseRepository;
 using Application.Interfaces.IExamRepository;
 using Application.Interfaces.IFlashCardRepository;
 using Application.Interfaces.IQuestionRepository;
+using Application.Interfaces.IShopRepository;
+
+//using Application.Interfaces.IShopRepository;
 using Application.Interfaces.ITopicRepository;
 using Application.Interfaces.IUserDailyMissionRepository;
 using Application.Interfaces.IUserRepository;
@@ -42,7 +45,7 @@ builder.Services
     .AddOpenAIChatCompletion(
         modelId: "google/gemini-flash-1.5-8b",
         openAIClient: new OpenAIClient(
-            credential: new ApiKeyCredential("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"),
+            credential: new ApiKeyCredential("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"),
             options: new OpenAIClientOptions
             {
                 Endpoint = new Uri("https://openrouter.ai/api/v1")
@@ -94,6 +97,7 @@ builder.Services.AddScoped(typeof(IQuestionRepository), typeof(QuestionRepositor
 builder.Services.AddScoped(typeof(IFlashCardRepository), typeof(FlashCardRepository));
 builder.Services.AddScoped(typeof(IUserStatisticsRepository), typeof(UserStatisticsRepository));
 builder.Services.AddScoped(typeof(IUserDailyMissionRepository), typeof(UserDailyMissionRepository));
+builder.Services.AddScoped(typeof(IShopRepository), typeof(ShopRepository));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //can yenileme
