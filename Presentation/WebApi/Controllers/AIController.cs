@@ -19,4 +19,11 @@ public class AIController : ControllerBase
         await _aiService.GetMessageStreamAsync(chatRequest.Prompt, chatRequest.ConnectionId, cancellationToken);
         return Ok(); // ya da response dönüyorsan onu return et
     }
+
+    [HttpPost("analyze")]
+    public async Task<IActionResult> Analyze([FromBody] AnalysisRequestVM request)
+    {
+        var result = await _aiService.GetAnalysisSuggestionsAsync(request);
+        return Ok(result);
+    }
 }

@@ -68,5 +68,34 @@ namespace WebApi.Services
             }
         }
 
+
+        public async Task<Dictionary<string, string>> GetAnalysisSuggestionsAsync(ViewModels.AnalysisRequestVM request)
+        {
+            var results = new Dictionary<string, string>();
+
+            foreach (var topic in request.Data)
+            {
+                string prompt = $"""
+                Öğrencinin '{topic.Topic}' adlı konuya ait {request.AnalysisType} performansı:
+                - ✅ Doğru: {topic.Correct}
+                - ❌ Yanlış: {topic.Wrong}
+                - ⏱️ Süre: {topic.Duration} dakika
+
+                Bu verilere göre kısa bir analiz yap ve öğrenciye bu konu özelinde öneri sun.
+                """;
+
+                var response = await chatCompletionService.GetChatMessageContentAsync(
+                    prompt,
+                    new OpenAIPromptExecutionSettings { FunctionChoiceBehavior = FunctionChoiceBehavior.Auto() },
+                    kernel
+                );
+
+                results[topic.Topic] = response?.Content?.Trim() ?? "Cevap alınamadı.";
+            }
+
+            return results;
+        }
+
+
     }
 }

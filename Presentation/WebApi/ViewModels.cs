@@ -6,5 +6,9 @@
         {
 
         }
+
+        public record TopicPerformanceVM(string Topic, int Correct, int Wrong, int Duration);
+
+        public record AnalysisRequestVM(string AnalysisType, List<TopicPerformanceVM> Data);
     }
 }
