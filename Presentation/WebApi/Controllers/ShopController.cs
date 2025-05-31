@@ -36,6 +36,12 @@ namespace WebAPI.Controllers
         [HttpPost("purchase")]
         public async Task<IActionResult> PurchaseShopItem([FromBody] PurchaseShopItemCommand command)
         {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized(new { error = "Geçersiz token veya kullanıcı bulunamadı." });
+
+            command.UserId = userId; // Token'dan gelen ID ile üzerine yaz
+
             var result = await _mediator.Send(command);
 
             if (result == "Success")
@@ -44,12 +50,19 @@ namespace WebAPI.Controllers
             return BadRequest(new { error = result });
         }
 
-        [HttpGet("items/{userId}")]
-        public async Task<IActionResult> GetShopItemsWithUserStatus(int userId)
+
+
+        [HttpGet("items")]
+        public async Task<IActionResult> GetShopItemsWithUserStatus()
         {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized("Invalid token or user not found.");
+
             var result = await _mediator.Send(new GetShopItemsWithUserStatusQuery { UserId = userId });
             return Ok(result);
         }
+
 
     }
 }

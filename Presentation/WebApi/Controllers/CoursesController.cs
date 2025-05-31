@@ -1,12 +1,15 @@
 ﻿using Application.Features.Mediator.Commands.CourseCommands;
 using Application.Features.Mediator.Queries.CourseQueries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
+
     [ApiController]
     public class CoursesController : ControllerBase
     {

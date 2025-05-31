@@ -1,12 +1,15 @@
 ﻿using Application.Features.Mediator.Commands.QuestionCommands;
 using Application.Features.Mediator.Queries.QuestionQueries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
+
     [ApiController]
     public class QuestionsController : ControllerBase
     {

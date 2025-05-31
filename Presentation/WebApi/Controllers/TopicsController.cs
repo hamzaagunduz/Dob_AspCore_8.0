@@ -1,12 +1,15 @@
 ﻿using Application.Features.Mediator.Commands.TopicCommands;
 using Application.Features.Mediator.Queries.TopicQueries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
+
     [ApiController]
     public class TopicsController : ControllerBase
     {

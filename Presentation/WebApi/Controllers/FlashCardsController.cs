@@ -2,12 +2,15 @@
 using Application.Features.Mediator.Queries.FlashCardQueries;
 using Application.Features.Mediator.Queries.FlashCardQuery;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
+
     [ApiController]
     public class FlashCardsController : ControllerBase
     {
@@ -60,21 +63,32 @@ namespace WebApi.Controllers
             var result = await _mediator.Send(query);
             return Ok(result);
         }
-
         [HttpGet("GetFlashCardsByTestId/{testId}")]
-        public async Task<IActionResult> GetFlashCardsBytestId(int testId,int userId)
+        public async Task<IActionResult> GetFlashCardsByTestId(int testId)
         {
-            var query = new GetFlashCardsByTestIdQuery(testId,userId);
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized("Geçersiz token veya kullanıcı bulunamadı.");
+
+            var query = new GetFlashCardsByTestIdQuery(testId, userId);
             var result = await _mediator.Send(query);
             return Ok(result);
         }
 
+
         [HttpPost("ToggleUserFlashCard")]
         public async Task<IActionResult> ToggleUserFlashCard([FromBody] AddUserFlashCardCommand command)
         {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized("Geçersiz token veya kullanıcı bulunamadı.");
+
+            command.AppUserID = userId; // Client’tan gelen ID’yi override ediyoruz
+
             await _mediator.Send(command);
             return Ok("Favori flashcard başarıyla güncellendi.");
         }
+
 
         [HttpGet("IsFavorite")]
         public async Task<IActionResult> IsFavorite([FromQuery] int userId, [FromQuery] int flashCardId)
@@ -84,12 +98,22 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("favorites/bycourse")]
-        public async Task<IActionResult> GetUserFavoriteFlashCardsByCourse([FromQuery] int appUserId, [FromQuery] int courseId)
+        public async Task<IActionResult> GetUserFavoriteFlashCardsByCourse([FromQuery] int courseId)
         {
+            // Token'dan userId al
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int appUserId))
+                return Unauthorized("Geçersiz token veya kullanıcı bulunamadı.");
+
+            // Query objesini token'dan alınan userId ve gelen courseId ile oluştur
             var query = new GetUserFavoriteFlashCardsByCourseQuery(appUserId, courseId);
+
+            // MediatR ile işle
             var result = await _mediator.Send(query);
+
             return Ok(result);
         }
+
 
     }
 }

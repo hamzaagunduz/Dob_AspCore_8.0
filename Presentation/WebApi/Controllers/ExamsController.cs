@@ -9,8 +9,9 @@ using System.Threading;
 namespace WebApi.Controllers
 {
     [ApiController]
+    [Authorize]
+
     [Route("api/[controller]")]
-    //[Authorize]
     public class ExamsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -29,12 +30,14 @@ namespace WebApi.Controllers
         }
 
 
+        [AllowAnonymous] // Bu endpoint için authorization geçersiz
         [HttpGet]
         public async Task<IActionResult> GetAllExams()
         {
             var exams = await _mediator.Send(new GetAllExamQuery());
             return Ok(exams);
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetExamById(int id)

@@ -1,12 +1,15 @@
 ﻿using Application.Features.Mediator.Commands.PerformanceCommands;
 using Application.Features.Mediator.Queries.PerformanceQuery;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
+
     [ApiController]
     public class PerformanceController : ControllerBase
     {
@@ -25,13 +28,25 @@ namespace WebApi.Controllers
                 return BadRequest("Veri eksik veya hatalı.");
             }
 
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized("Geçersiz token veya kullanıcı bulunamadı.");
+
+            command.AppUserId = userId; // Token'dan gelen ID ile override et
+
             await _mediator.Send(command);
             return Ok(new { message = "Performans verileri başarıyla kaydedildi." });
         }
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetPerformance(int userId, [FromQuery] string range)
+
+        [HttpGet("performance")] // userId artık yok URL'de
+        public async Task<IActionResult> GetPerformance([FromQuery] string range)
         {
+            // Token'dan userId alıyoruz
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized("Invalid token or user not found.");
+
             var result = await _mediator.Send(new PerformanceQuery
             {
                 userId = userId,
@@ -40,5 +55,6 @@ namespace WebApi.Controllers
 
             return Ok(result);
         }
+
     }
 }

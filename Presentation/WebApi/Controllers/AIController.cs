@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using static WebApi.ViewModels;
 using WebApi.Services;
+using Microsoft.AspNetCore.Authorization;
 
 [Route("api/[controller]")]
+[Authorize]
 [ApiController]
 public class AIController : ControllerBase
 {

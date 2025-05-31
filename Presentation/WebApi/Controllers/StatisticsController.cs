@@ -1,12 +1,15 @@
 ﻿using Application.Features.Mediator.Commands.StatisticsCommands;
 using Application.Features.Mediator.Queries.StatisticsQuery;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
     [ApiController]
+    [Authorize]
+
     [Route("api/[controller]")]
     public class StatisticsController : ControllerBase
     {
@@ -20,13 +23,23 @@ namespace WebApi.Controllers
         [HttpPost("update")]
         public async Task<IActionResult> UpdateStatistics([FromBody] UpdateUserStatisticsCommand command)
         {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized("Geçersiz token veya kullanıcı bulunamadı.");
+
+            command.AppUserId = userId; // Client'tan gelen ID'yi ez
+
             await _mediator.Send(command);
             return Ok();
         }
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUserStatistics(int userId)
+        [HttpGet]
+        public async Task<IActionResult> GetUserStatistics()
         {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized("Geçersiz token veya kullanıcı bulunamadı.");
+
             var result = await _mediator.Send(new GetUserProfileStatisticsQuery(userId));
 
             if (result == null)
@@ -34,6 +47,7 @@ namespace WebApi.Controllers
 
             return Ok(result);
         }
+
     }
 
 }
