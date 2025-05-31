@@ -16,6 +16,8 @@ namespace Application.Interfaces.IUserDailyMissionRepository
         Task UpdateAsync(UserDailyMission mission);
 
         Task ResetAllUserDailyMissionsAsync();
+        Task<List<DailyMission>> GetAllDailyMissionsAsync();
+        Task CreateUserDailyMissionsForUserAsync(int appUserId);
 
     }
 

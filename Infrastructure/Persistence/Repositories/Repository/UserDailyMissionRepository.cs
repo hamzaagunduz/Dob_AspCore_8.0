@@ -61,6 +61,43 @@ namespace Persistence.Repositories.Repository
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<DailyMission>> GetAllDailyMissionsAsync()
+        {
+            return await _context.DailyMissions.ToListAsync();
+        }
+
+
+        public async Task CreateUserDailyMissionsForUserAsync(int appUserId)
+        {
+            // 1. Tüm DailyMissionları çek
+            var allDailyMissions = await _context.DailyMissions.ToListAsync();
+
+            // 2. Kullanıcının mevcut UserDailyMission kayıtlarını çek (varsa)
+            var existingUserMissions = await _context.UserDailyMissions
+                .Where(x => x.AppUserId == appUserId)
+                .Select(x => x.DailyMissionId)
+                .ToListAsync();
+
+            // 3. Yeni eklenmesi gereken görevleri belirle (var olmayanlar)
+            var missionsToAdd = allDailyMissions
+                .Where(dm => !existingUserMissions.Contains(dm.Id))
+                .Select(dm => new UserDailyMission
+                {
+                    AppUserId = appUserId,
+                    DailyMissionId = dm.Id,
+                    CurrentValue = 0,
+                    IsCompleted = false,
+                    Date = DateTime.UtcNow,
+                })
+                .ToList();
+
+            // 4. Yeni görevler varsa topluca ekle
+            if (missionsToAdd.Any())
+            {
+                await _context.UserDailyMissions.AddRangeAsync(missionsToAdd);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 
 }

@@ -34,11 +34,16 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAppUser(CreateAppUserCommand command)
         {
+            var result = await _mediator.Send(command);
 
-            await _mediator.Send(command);
+            if (!result.Success)
+            {
+                return BadRequest(new { Errors = result.Errors });
+            }
+
             return Ok("AppUser başarıyla eklendi");
-
         }
+
         [HttpDelete]
         public async Task<IActionResult> RemoveAppUser(int id)
         {

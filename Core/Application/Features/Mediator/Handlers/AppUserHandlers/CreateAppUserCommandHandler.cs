@@ -1,29 +1,27 @@
 ﻿using Application.Features.Mediator.Commands.AppUserCommands;
-using Application.Interfaces;
+using Application.Interfaces.IUserDailyMissionRepository;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Features.Mediator.Handlers.AppUserHandlers
 {
-    public class CreateAppUserCommandHandler : IRequestHandler<CreateAppUserCommand>
+    public class CreateAppUserCommandHandler : IRequestHandler<CreateAppUserCommand, CommandResult>
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly IMediator _mediator;
+        private readonly IUserDailyMissionRepository _userDailyMissionRepository;
 
-        public CreateAppUserCommandHandler( UserManager<AppUser> userManager, IMediator mediator)
+        public CreateAppUserCommandHandler(UserManager<AppUser> userManager, IUserDailyMissionRepository userDailyMissionRepository)
         {
             _userManager = userManager;
-            _mediator = mediator;
+            _userDailyMissionRepository = userDailyMissionRepository;
         }
 
-        public async Task Handle(CreateAppUserCommand request, CancellationToken cancellationToken)
+        public async Task<CommandResult> Handle(CreateAppUserCommand request, CancellationToken cancellationToken)
         {
             var newUser = new AppUser
             {
@@ -33,7 +31,6 @@ namespace Application.Features.Mediator.Handlers.AppUserHandlers
                 Email = request.Email,
                 ImageURL = request.ImageURL,
                 ExamID = request.ExamID,
-
             };
 
             IdentityResult result = await _userManager.CreateAsync(newUser, request.Password);
@@ -46,7 +43,23 @@ namespace Application.Features.Mediator.Handlers.AppUserHandlers
                 {
                     Debug.WriteLine($"Kod: {error.Code}, Açıklama: {error.Description}");
                 }
+
+                // Hataları dön
+                var errors = result.Errors.Select(e => $"{e.Code}: {e.Description}");
+                return new CommandResult
+                {
+                    Success = false,
+                    Errors = errors
+                };
             }
+
+            int userId = newUser.Id;
+            await _userDailyMissionRepository.CreateUserDailyMissionsForUserAsync(userId);
+
+            return new CommandResult
+            {
+                Success = true
+            };
         }
     }
 }

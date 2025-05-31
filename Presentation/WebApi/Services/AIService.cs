@@ -17,7 +17,19 @@ namespace WebApi.Services
 
             var history = HistoryService.GetChatHistory(connectionId);
 
-            history.AddUserMessage(prompt);
+            // Şıksız soru için öğretici açıklama şablonu
+            string formattedPrompt = $"""
+            Aşağıdaki soruyu detaylı ve öğretici bir şekilde adım adım yanıtla.
+            - Önce soruyu analiz et,
+            - Konu hakkında kısa ama net bir genel bilgi ver,
+            - Sorunun olası doğru yanıtını açıkla ve neden o yanıtın doğru olacağını mantıksal olarak belirt,
+            - Eğer seçenekler yoksa, farklı ihtimalleri değerlendirerek neden-sonuç ilişkisi kurarak anlat.
+
+            Soru:
+            {prompt}
+            """;
+
+            history.AddUserMessage(formattedPrompt);
             string responseContent = "";
             try
             {
@@ -30,10 +42,13 @@ namespace WebApi.Services
             }
             catch (Exception ex)
             {
-
+                // Hatalar loglanabilir
+                Console.WriteLine($"Hata oluştu: {ex.Message}");
             }
+
             history.AddAssistantMessage(responseContent);
         }
+
 
 
 
