@@ -52,6 +52,8 @@ namespace Application.Features.Mediator.Handlers.AppUserHandlers
                     Errors = errors
                 };
             }
+            await _userManager.AddToRoleAsync(newUser, "Student");
+
 
             int userId = newUser.Id;
             await _userDailyMissionRepository.CreateUserDailyMissionsForUserAsync(userId);

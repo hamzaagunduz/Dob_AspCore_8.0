@@ -18,15 +18,21 @@ namespace Application.Tools
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, result.Id.ToString()),
-                new Claim("userId", result.Id.ToString())
             };
 
 
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, result.Id.ToString()));
 
 
             if (!string.IsNullOrWhiteSpace(result.UserName))
                 claims.Add(new Claim("Username", result.UserName));
+
+            if (result.Roles != null)
+            {
+                foreach (var role in result.Roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role)); // veya "role"
+                }
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtTokenDefaults.Key));
 

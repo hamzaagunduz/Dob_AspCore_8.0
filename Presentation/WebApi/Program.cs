@@ -15,6 +15,7 @@ using Application.Services;
 using Application.Tools;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.SemanticKernel;
@@ -176,6 +177,26 @@ builder.Services.AddHttpContextAccessor();
 
 
 var app = builder.Build();
+
+// Roll seed etmek için
+//async Task SeedRolesAsync(IServiceProvider serviceProvider)
+//{
+//    using var scope = serviceProvider.CreateScope();
+//    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
+
+//    string[] roles = new[] { "Admin", "Teacher", "Student" };
+
+//    foreach (var role in roles)
+//    {
+//        if (!await roleManager.RoleExistsAsync(role))
+//        {
+//            await roleManager.CreateAsync(new AppRole { Name = role });
+//        }
+//    }
+//}
+
+//await SeedRolesAsync(app.Services);
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
