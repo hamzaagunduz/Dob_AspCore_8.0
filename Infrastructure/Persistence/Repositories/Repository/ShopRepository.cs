@@ -43,6 +43,19 @@ namespace Persistence.Repositories.Repository
                 .Where(x => x.AppUserId == userId && x.ExpirationDate > DateTime.UtcNow)
                 .ToListAsync();
         }
+
+        public async Task<bool> HasActiveShopItemAsync(int userId, int shopItemId)
+        {
+            var currentDate = DateTime.UtcNow;
+
+            return await _context.UserShopItems
+                .Include(usi => usi.ShopItem)
+                .AnyAsync(usi =>
+                    usi.AppUserId == userId &&
+                    usi.ShopItem.Id == shopItemId &&
+                    usi.ExpirationDate > currentDate
+                );
+        }
     }
 
 }

@@ -45,6 +45,9 @@ namespace Persistence.Repositories.Repository
 
             return (user.Lives, user.LastLifeAddedTime);
         }
+
+
+
     }
 
 }

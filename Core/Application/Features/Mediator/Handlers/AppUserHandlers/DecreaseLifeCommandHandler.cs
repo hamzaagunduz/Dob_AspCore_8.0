@@ -1,4 +1,5 @@
 ﻿using Application.Features.Mediator.Commands.AppUserCommands;
+using Application.Interfaces.IShopRepository;
 using Application.Interfaces.IUserRepository;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -14,11 +15,13 @@ namespace Application.Features.Mediator.Handlers.AppUserHandlers
     {
         private readonly IUserRepository _userRepository;
         private readonly ILogger<DecreaseLifeCommandHandler> _logger;
+        private readonly IShopRepository _shopRepository;
 
-        public DecreaseLifeCommandHandler(IUserRepository userRepository, ILogger<DecreaseLifeCommandHandler> logger)
+        public DecreaseLifeCommandHandler(IUserRepository userRepository, ILogger<DecreaseLifeCommandHandler> logger, IShopRepository shopRepository)
         {
             _userRepository = userRepository;
             _logger = logger;
+            _shopRepository = shopRepository;
         }
 
         public async Task<bool> Handle(DecreaseLifeCommand request, CancellationToken cancellationToken)
@@ -35,7 +38,12 @@ namespace Application.Features.Mediator.Handlers.AppUserHandlers
                 _logger.LogInformation("User with id {UserId} has no lives left.", request.UserId);
                 return false;
             }
-
+            bool premium = await _shopRepository.HasActiveShopItemAsync(request.UserId, 2);
+            if (premium)
+            {
+                _logger.LogInformation("User with id {UserId} is premium. Life is not decreased.", request.UserId);
+                return true;
+            }
             user.Lives -= 1;
 
             await _userRepository.UpdateAsync(user);

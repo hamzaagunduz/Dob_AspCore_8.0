@@ -13,6 +13,7 @@ namespace Application.Interfaces.IShopRepository
         Task<ShopItem> AddAsync(ShopItem item);
         Task AddUserShopItemAsync(UserShopItem userShopItem);
         Task<List<UserShopItem>> GetUserShopItemsByUserIdAsync(int userId);
+        Task<bool> HasActiveShopItemAsync(int userId,  int shopItemId);
 
     }
 

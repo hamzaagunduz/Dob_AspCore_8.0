@@ -1,6 +1,7 @@
 ﻿using Application.Features.Mediator.Queries.StatisticsQuery;
 using Application.Features.Mediator.Results.StatisticsResults;
 using Application.Interfaces;
+using Application.Interfaces.IShopRepository;
 using Application.Interfaces.IUserStatisticsRepository;
 using Domain.Entities;
 using MediatR;
@@ -16,12 +17,14 @@ namespace Application.Features.Mediator.Handlers.StatisticsHandlers
     {
         private readonly IRepository<AppUser> _appUserRepository;
         private readonly IUserStatisticsRepository _userStatisticsRepository;
+        private readonly IShopRepository _shopRepository;
 
         public GetUserProfileStatisticsQueryHandler(
-            IUserStatisticsRepository userStatisticsRepository, IRepository<AppUser> appUserRepository)
+            IUserStatisticsRepository userStatisticsRepository, IRepository<AppUser> appUserRepository, IShopRepository shopRepository)
         {
             _userStatisticsRepository = userStatisticsRepository;
             _appUserRepository = appUserRepository;
+            _shopRepository = shopRepository;
         }
 
         public async Task<UserProfileStatisticsResult> Handle(GetUserProfileStatisticsQuery request, CancellationToken cancellationToken)
@@ -30,21 +33,22 @@ namespace Application.Features.Mediator.Handlers.StatisticsHandlers
 
             if (user == null)
                 return null;
+    bool premium = await _shopRepository.HasActiveShopItemAsync(request.AppUserId, 2);
 
-            return new UserProfileStatisticsResult
-            {
-                FirstName = user.FirstName,
-                SurName = user.SurName,
-                Email = user.Email,
-                Lives = user.Lives,
-                Diamond = user.Diamond,
-                TotalScore = stats.TotalScore,
-                TotalTestsCompleted = stats.TotalTestsCompleted,
-                PerfectTestsCompleted = stats.PerfectTestsCompleted,
-                Score = stats.Score,
-                League = stats.League,
-                ConsecutiveDays = stats.ConsecutiveDays
-            };
+    return new UserProfileStatisticsResult
+    {
+        FirstName = user.FirstName,
+        SurName = user.SurName,
+        Email = user.Email,
+        Lives = premium ? 999 : user.Lives,
+        Diamond = user.Diamond,
+        TotalScore = stats.TotalScore,
+        TotalTestsCompleted = stats.TotalTestsCompleted,
+        PerfectTestsCompleted = stats.PerfectTestsCompleted,
+        Score = stats.Score,
+        League = stats.League,
+        ConsecutiveDays = stats.ConsecutiveDays
+    };
         }
     }
 }
