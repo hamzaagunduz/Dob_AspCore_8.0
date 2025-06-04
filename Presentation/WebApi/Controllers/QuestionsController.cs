@@ -82,14 +82,14 @@ namespace WebApi.Controllers
             return Ok(new { imageUrl = imagePath });
         }
 
-        [HttpPost("UploadImages")]
-        public ActionResult UploadImage(IFormFile file)
+        [HttpPost("create-full-question")]
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> CreateFullQuestion([FromForm] CreateFullQuestionCommand command)
         {
-
-            //_logger.LogInformation(file.FileName);
-            // we can put rest of upload logic here.
-            return Ok();
+            var questionId = await _mediator.Send(command);
+            return Ok(questionId);
         }
+
 
     }
 }

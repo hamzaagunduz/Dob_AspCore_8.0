@@ -218,6 +218,7 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseCors();
+app.UseStaticFiles();  // wwwroot altýndaki dosyalarý açar
 
 app.UseHttpsRedirection();
 

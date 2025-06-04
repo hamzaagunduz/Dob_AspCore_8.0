@@ -18,7 +18,6 @@ public class GetQuestionsByTestIdQueryHandler : IRequestHandler<GetQuestionsByTe
     {
         var questions = await _questionRepository.GetQuestionsByTestIdAsync(request.TestID);
 
-        // Data transfer object dönüşümü
         return questions.Select(q => new GetQuestionsByTestIdQueryResult
         {
             QuestionID = q.QuestionID,
@@ -28,7 +27,13 @@ public class GetQuestionsByTestIdQueryHandler : IRequestHandler<GetQuestionsByTe
             OptionC = q.OptionC,
             OptionD = q.OptionD,
             OptionE = q.OptionE,
-            Answer = q.Answer
+            Answer = q.Answer,
+            Images = q.Images?.Select(img => new QuestionImageDto
+            {
+                ImageUrl = img.ImageUrl,
+                Type = img.Type
+            }).ToList()
         }).ToList();
     }
+
 }

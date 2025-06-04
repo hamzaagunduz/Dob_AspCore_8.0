@@ -22,9 +22,11 @@ namespace Persistence.Repositories.Repository
         public async Task<List<Question>> GetQuestionsByTestIdAsync(int testId)
         {
             return await _context.Questions
+                .Include(q => q.Images) // <-- ilişkili resimleri yükler
                 .Where(q => q.TestID == testId)
                 .ToListAsync();
         }
+
 
         public async Task AddImgAsync(QuestionImage image)
         {
