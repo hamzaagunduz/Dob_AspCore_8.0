@@ -25,5 +25,11 @@ namespace Persistence.Repositories.Repository
                 .Where(q => q.TestID == testId)
                 .ToListAsync();
         }
+
+        public async Task AddImgAsync(QuestionImage image)
+        {
+            await _context.QuestionImages.AddAsync(image);
+            await _context.SaveChangesAsync();
+        }
     }
 }

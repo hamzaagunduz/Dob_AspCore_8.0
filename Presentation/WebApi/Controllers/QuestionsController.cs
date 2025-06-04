@@ -1,5 +1,6 @@
 ﻿using Application.Features.Mediator.Commands.QuestionCommands;
 using Application.Features.Mediator.Queries.QuestionQueries;
+using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
 
     [ApiController]
     public class QuestionsController : ControllerBase
@@ -61,6 +62,33 @@ namespace WebApi.Controllers
             var query = new GetQuestionsByTestIdQuery(testId);
             var result = await _mediator.Send(query);
             return Ok(result);
+        }
+
+        [HttpPost("UploadImage")]
+        public async Task<IActionResult> UploadQuestionImage([FromForm] int questionId, [FromForm] QuestionImageType type,  IFormFile file)
+
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("Geçerli bir dosya yükleyin.");
+
+            var command = new CreateQuestionImageCommand
+            {
+                QuestionID = questionId,
+                Type = type,
+                File = file
+            };
+
+            var imagePath = await _mediator.Send(command);
+            return Ok(new { imageUrl = imagePath });
+        }
+
+        [HttpPost("UploadImages")]
+        public ActionResult UploadImage(IFormFile file)
+        {
+
+            //_logger.LogInformation(file.FileName);
+            // we can put rest of upload logic here.
+            return Ok();
         }
 
     }

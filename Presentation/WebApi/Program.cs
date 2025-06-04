@@ -1,6 +1,7 @@
 using Application.Interfaces;
 using Application.Interfaces.ICourseRepository;
 using Application.Interfaces.IExamRepository;
+using Application.Interfaces.IFileStorageService;
 using Application.Interfaces.IFlashCardRepository;
 using Application.Interfaces.IQuestionRepository;
 using Application.Interfaces.IShopRepository;
@@ -14,6 +15,7 @@ using Application.Interfaces.IUserTopicPerformanceRepository;
 using Application.Services;
 using Application.Tools;
 using Domain.Entities;
+using Infrastructure.Persistence.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -47,7 +49,7 @@ builder.Services
     .AddOpenAIChatCompletion(
         modelId: "google/gemini-flash-1.5-8b",
         openAIClient: new OpenAIClient(
-            credential: new ApiKeyCredential(""),
+            credential: new ApiKeyCredential("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"),
             options: new OpenAIClientOptions
             {
                 Endpoint = new Uri("https://openrouter.ai/api/v1")
@@ -85,6 +87,8 @@ builder.Services.AddSwaggerGen(c =>
             new List<string>()
         }
     });
+
+
 });
 
 
@@ -101,6 +105,7 @@ builder.Services.AddScoped(typeof(IUserStatisticsRepository), typeof(UserStatist
 builder.Services.AddScoped(typeof(IUserDailyMissionRepository), typeof(UserDailyMissionRepository));
 builder.Services.AddScoped(typeof(IShopRepository), typeof(ShopRepository));
 builder.Services.AddScoped(typeof(IUserTopicPerformanceRepository), typeof(UserTopicPerformanceRepository));
+builder.Services.AddScoped(typeof(IFileStorageService), typeof(FileStorageService));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 

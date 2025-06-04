@@ -10,6 +10,8 @@ namespace Application.Interfaces.IQuestionRepository
     public interface IQuestionRepository
     {
         Task<List<Question>> GetQuestionsByTestIdAsync(int testId);
+        Task AddImgAsync(QuestionImage image);
+
     }
 
 }
