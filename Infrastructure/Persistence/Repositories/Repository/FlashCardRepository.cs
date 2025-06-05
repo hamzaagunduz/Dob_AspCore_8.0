@@ -43,12 +43,15 @@ public class FlashCardRepository : IFlashCardRepository
     public async Task<List<FlashCard>> GetUserFavoriteFlashCardsByCourseAsync(int appUserId, int courseId)
     {
         return await _context.FlashCards
-              .Where(f => f.AppUserFlashCards.Any(aufc => aufc.AppUserID == appUserId)
-                          && f.Question.Test.Topic.CourseID == courseId)
-              .ToListAsync();
+            .Where(f => f.AppUserFlashCards.Any(aufc => aufc.AppUserID == appUserId) &&
+                        f.Question.Test.TestGroup != null &&
+                        f.Question.Test.TestGroup.Topic != null &&
+                        f.Question.Test.TestGroup.Topic.CourseID == courseId)
+            .ToListAsync();
     }
 
-public async Task<List<FlashCard>> GetFlashCardsByTestIdAsync(int testId)
+
+    public async Task<List<FlashCard>> GetFlashCardsByTestIdAsync(int testId)
 {
         return await _context.FlashCards
             .Include(fc => fc.Question)

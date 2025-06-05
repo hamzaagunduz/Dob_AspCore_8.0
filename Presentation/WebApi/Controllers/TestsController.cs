@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
 
     [ApiController]
     public class TestsController : ControllerBase

@@ -23,7 +23,6 @@ namespace Application.Features.Mediator.Handlers.TestHandlers
             {
                 test.Title = request.Title;
                 test.Description = request.Description;
-                test.TopicID = request.TopicID;
                 await _repository.UpdateAsync(test);
             }
         }

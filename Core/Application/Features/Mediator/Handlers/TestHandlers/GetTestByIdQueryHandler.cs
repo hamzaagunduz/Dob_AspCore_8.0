@@ -27,7 +27,6 @@ namespace Application.Features.Mediator.Handlers.TestHandlers
                     TestID = test.TestID,
                     Title = test.Title,
                     Description = test.Description,
-                    TopicID = test.TopicID
                 };
             }
             return null;

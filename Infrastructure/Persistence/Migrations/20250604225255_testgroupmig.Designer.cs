@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DobContext))]
-    partial class DobContextModelSnapshot : ModelSnapshot
+    [Migration("20250604225255_testgroupmig")]
+    partial class testgroupmig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -414,9 +417,14 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TopicID")
+                        .HasColumnType("int");
+
                     b.HasKey("TestID");
 
                     b.HasIndex("TestGroupID");
+
+                    b.HasIndex("TopicID");
 
                     b.ToTable("Tests");
                 });
@@ -787,7 +795,15 @@ namespace Persistence.Migrations
                         .WithMany("Tests")
                         .HasForeignKey("TestGroupID");
 
+                    b.HasOne("Domain.Entities.Topic", "Topic")
+                        .WithMany("Tests")
+                        .HasForeignKey("TopicID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("TestGroup");
+
+                    b.Navigation("Topic");
                 });
 
             modelBuilder.Entity("Domain.Entities.TestGroup", b =>
@@ -965,6 +981,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Topic", b =>
                 {
                     b.Navigation("TestGroups");
+
+                    b.Navigation("Tests");
 
                     b.Navigation("TopicPerformances");
                 });

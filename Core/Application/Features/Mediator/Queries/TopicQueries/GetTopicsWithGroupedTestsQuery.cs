@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Mediator.Queries.TopicQueries
 {
-    public class GetTopicsWithTestsByCourseIdQuery : IRequest<List<GetTopicsWithTestsByCourseIdQueryQueryResult>>
+    public class GetTopicsWithGroupedTestsQuery : IRequest<List<GetTopicsWithGroupedTestsQueryResult>>
     {
-
         public int CourseId { get; set; }
 
-        public GetTopicsWithTestsByCourseIdQuery(int CourseId)
+        public GetTopicsWithGroupedTestsQuery(int courseId)
         {
-            this.CourseId = CourseId;
+            CourseId = courseId;
         }
     }
+
 }

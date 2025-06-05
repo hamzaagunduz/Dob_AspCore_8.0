@@ -20,9 +20,12 @@ namespace Domain.Entities
         public Course Course { get; set; } // İlişki
 
         // Bire-Çoğul İlişki: Topic -> Test
-        public ICollection<Test> Tests { get; set; }
+        //public ICollection<Test> Tests { get; set; }
+        public ICollection<TestGroup> TestGroups { get; set; } = new List<TestGroup>();
+
         public ICollection<UserTopicPerformance> TopicPerformances { get; set; }
 
     }
+
 
 }

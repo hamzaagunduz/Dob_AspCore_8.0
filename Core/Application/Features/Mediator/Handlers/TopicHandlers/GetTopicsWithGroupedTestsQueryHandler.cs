@@ -10,36 +10,39 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Mediator.Handlers.TopicHandlers
 {
-    public class GetTopicsWithTestsByCourseIdQueryHandler : IRequestHandler<GetTopicsWithTestsByCourseIdQuery, List<GetTopicsWithTestsByCourseIdQueryQueryResult>>
+    public class GetTopicsWithGroupedTestsQueryHandler : IRequestHandler<GetTopicsWithGroupedTestsQuery, List<GetTopicsWithGroupedTestsQueryResult>>
     {
         private readonly ITopicRepository _topicRepository;
 
-        public GetTopicsWithTestsByCourseIdQueryHandler(ITopicRepository topicRepository)
+        public GetTopicsWithGroupedTestsQueryHandler(ITopicRepository topicRepository)
         {
             _topicRepository = topicRepository;
         }
 
-        public async Task<List<GetTopicsWithTestsByCourseIdQueryQueryResult>> Handle(GetTopicsWithTestsByCourseIdQuery request, CancellationToken cancellationToken)
+        public async Task<List<GetTopicsWithGroupedTestsQueryResult>> Handle(GetTopicsWithGroupedTestsQuery request, CancellationToken cancellationToken)
         {
             var topics = await _topicRepository.GetTopicsWithTestsByCourseIdAsync(request.CourseId);
 
-            return topics.Select(topic => new GetTopicsWithTestsByCourseIdQueryQueryResult
+            return topics.Select(topic => new GetTopicsWithGroupedTestsQueryResult
             {
                 TopicID = topic.TopicID,
                 Name = topic.Name,
                 Description = topic.Description,
                 VideoLink = topic.VideoLink,
-                Tests = topic.TestGroups
-                    .SelectMany(tg => tg.Tests) // TestGroup içindeki tüm testleri düzleştiriyoruz
-                    .Select(test => new TestDto
+                TestGroups = topic.TestGroups.Select(tg => new TestGroupDto
+                {
+                    TestGroupID = tg.TestGroupID,
+                    Title = tg.Title,
+                    Description = tg.Description,
+                    Tests = tg.Tests.Select(test => new TestDto
                     {
                         TestID = test.TestID,
                         Title = test.Title,
                         Description = test.Description
-                    })
-                    .ToList()
+                    }).ToList()
+                }).ToList()
             }).ToList();
         }
-
     }
+
 }

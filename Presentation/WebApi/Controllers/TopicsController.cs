@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
 
     [ApiController]
     public class TopicsController : ControllerBase
@@ -61,6 +60,14 @@ namespace WebApi.Controllers
             var topicsWithTests = await _mediator.Send(new GetTopicsWithTestsByCourseIdQuery(courseId));
             return Ok(topicsWithTests);
         }
+
+        [HttpGet("course/{courseId}/grouped-tests")]
+        public async Task<IActionResult> GetTopicsWithGroupedTestsByCourseId(int courseId)
+        {
+            var result = await _mediator.Send(new GetTopicsWithGroupedTestsQuery(courseId));
+            return Ok(result);
+        }
+
 
     }
 }

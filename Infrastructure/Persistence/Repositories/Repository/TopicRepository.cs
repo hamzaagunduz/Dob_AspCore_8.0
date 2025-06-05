@@ -19,12 +19,14 @@ namespace Persistence.Repositories.Repository
             _context = context;
         }
 
-        public async Task<List<Topic>> GetTopicsWithTestsByCourseIdAsync(int examId)
+        public async Task<List<Topic>> GetTopicsWithTestsByCourseIdAsync(int courseId)
         {
             return await _context.Set<Topic>()
-                .Include(t => t.Tests) // Test ilişkisini dahil ediyoruz.
-                .Where(t => t.CourseID == examId) // ExamID'ye göre filtreleme.
+                .Include(t => t.TestGroups)
+                    .ThenInclude(tg => tg.Tests)
+                .Where(t => t.CourseID == courseId)
                 .ToListAsync();
         }
+
     }
 }

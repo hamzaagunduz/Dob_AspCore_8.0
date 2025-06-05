@@ -9,7 +9,6 @@ using System.Security.Claims;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Authorize]
 
     [Route("api/[controller]")]
     public class DailyMissionController : ControllerBase

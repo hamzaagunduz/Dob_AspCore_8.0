@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Authorize]
 
     [Route("api/[controller]")]
     public class StatisticsController : ControllerBase

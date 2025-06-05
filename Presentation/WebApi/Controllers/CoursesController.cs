@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
-
     [ApiController]
     public class CoursesController : ControllerBase
     {

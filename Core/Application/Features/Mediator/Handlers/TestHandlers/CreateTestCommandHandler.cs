@@ -25,7 +25,7 @@ namespace Application.Features.Mediator.Handlers.TestHandlers
             {
                 Title = request.Title,
                 Description = request.Description,
-                TopicID = request.TopicID
+                TestGroupID = request.TestGruopID,
             };
 
             await _repository.CreateAsync(test);

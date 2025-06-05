@@ -30,6 +30,7 @@ namespace Persistence.Context
         public DbSet<UserShopItem> UserShopItems { get; set; }
         public DbSet<UserTopicPerformance> UserTopicPerformances { get; set; }
         public DbSet<QuestionImage> QuestionImages { get; set; }
+        public DbSet<TestGroup> TestGroups { get; set; }
 
 
     }

@@ -12,5 +12,6 @@ namespace Application.Features.Mediator.Commands.TestCommand
         public string Title { get; set; }
         public string? Description { get; set; }
         public int TopicID { get; set; }
+        public int TestGruopID { get; set; }
     }
 }

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Application.Interfaces.IShopRepository;
 
 [Route("api/[controller]")]
-[Authorize]
 [ApiController]
 public class AIController : ControllerBase
 {
