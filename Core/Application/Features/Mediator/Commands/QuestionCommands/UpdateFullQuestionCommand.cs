@@ -1,17 +1,13 @@
-﻿using MediatR;
+﻿// Application/Fetaures/Mediator/Commands/QuestionCommands/UpdateFullQuestionCommand.cs
+using MediatR;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.Mediator.Commands.QuestionCommands
 {
-    public class CreateFullQuestionCommand : IRequest<int>
+    public class UpdateFullQuestionCommand : IRequest
     {
+        public int QuestionID { get; set; }
         public string QuestionText { get; set; }
-
         public string OptionA { get; set; }
         public string OptionB { get; set; }
         public string OptionC { get; set; }
@@ -29,5 +25,7 @@ namespace Application.Features.Mediator.Commands.QuestionCommands
         public IFormFile? OptionCImage { get; set; }
         public IFormFile? OptionDImage { get; set; }
         public IFormFile? OptionEImage { get; set; }
+
+        public bool RemoveFlashCard { get; set; } // Added for explicit flashcard removal
     }
 }

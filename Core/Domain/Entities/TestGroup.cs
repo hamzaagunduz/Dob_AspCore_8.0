@@ -18,7 +18,7 @@ namespace Domain.Entities
         public int? TopicID { get; set; }
         public Topic? Topic { get; set; }
 
-        public ICollection<Test> Tests { get; set; } = new List<Test>();
+        public ICollection<Test>? Tests { get; set; } = new List<Test>();
     }
 
 

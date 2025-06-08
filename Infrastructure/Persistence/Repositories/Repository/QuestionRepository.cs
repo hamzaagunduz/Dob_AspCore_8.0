@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.IQuestionRepository;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 using System;
@@ -28,10 +29,24 @@ namespace Persistence.Repositories.Repository
         }
 
 
+        public async Task<QuestionImage?> GetByQuestionIdAndTypeAsync(int questionId, QuestionImageType type)
+        {
+            return await _context.QuestionImages
+                .FirstOrDefaultAsync(qi => qi.QuestionID == questionId && qi.Type == type);
+        }
+
+        public async Task UpdateImgAsync(QuestionImage image)
+        {
+            _context.QuestionImages.Update(image);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task AddImgAsync(QuestionImage image)
         {
             await _context.QuestionImages.AddAsync(image);
             await _context.SaveChangesAsync();
         }
+
+
     }
 }

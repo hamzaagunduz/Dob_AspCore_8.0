@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Mediator.Commands.TestCommand
 {
-    public class CreateTestCommand : IRequest
+    public class CreateTestGroupCommand : IRequest<int>
     {
         public string Title { get; set; }
         public string? Description { get; set; }
-        //public int TopicID { get; set; }
-        public int TestGruopID { get; set; }
+        public string test { get; set; }
+
+        public int? TopicID { get; set; }
     }
 }

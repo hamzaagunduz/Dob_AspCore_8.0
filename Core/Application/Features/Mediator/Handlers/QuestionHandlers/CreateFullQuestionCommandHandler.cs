@@ -12,17 +12,20 @@ namespace Application.Features.Mediator.Handlers.QuestionHandlers
     public class CreateFullQuestionCommandHandler : IRequestHandler<CreateFullQuestionCommand, int>
     {
         private readonly IRepository<Question> _questionRepository;
+        private readonly IRepository<FlashCard> _flashCarRepository;
         private readonly IQuestionRepository _questionImageRepository;
         private readonly IFileStorageService _fileStorageService;
 
         public CreateFullQuestionCommandHandler(
             IRepository<Question> questionRepository,
             IFileStorageService fileStorageService,
-            IQuestionRepository questionImageRepository)
+            IQuestionRepository questionImageRepository,
+            IRepository<FlashCard> flashCarRepository)
         {
             _questionRepository = questionRepository;
             _fileStorageService = fileStorageService;
             _questionImageRepository = questionImageRepository;
+            _flashCarRepository = flashCarRepository;
         }
 
         public async Task<int> Handle(CreateFullQuestionCommand request, CancellationToken cancellationToken)
@@ -65,6 +68,20 @@ namespace Application.Features.Mediator.Handlers.QuestionHandlers
             await SaveImage(request.OptionCImage, QuestionImageType.OptionC);
             await SaveImage(request.OptionDImage, QuestionImageType.OptionD);
             await SaveImage(request.OptionEImage, QuestionImageType.OptionE);
+
+            if (!string.IsNullOrWhiteSpace(request.FlashCardFront) && !string.IsNullOrWhiteSpace(request.FlashCardBack))
+            {
+                var flashCard = new FlashCard
+                {
+                    Front = request.FlashCardFront,
+                    Back = request.FlashCardBack,
+                    QuestionID = question.QuestionID
+                };
+
+                question.FlashCard = flashCard;
+                await _flashCarRepository.CreateAsync(flashCard); 
+
+            }
 
             return question.QuestionID;
         }

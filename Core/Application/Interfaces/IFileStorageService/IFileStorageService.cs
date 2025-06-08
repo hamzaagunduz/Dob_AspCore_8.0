@@ -10,5 +10,8 @@ namespace Application.Interfaces.IFileStorageService
     public interface IFileStorageService
     {
         Task<string> SaveFileAsync(IFormFile file, string folderName, CancellationToken cancellationToken);
+
+        Task DeleteFileAsync(string filePath); // Add this method
+
     }
 }

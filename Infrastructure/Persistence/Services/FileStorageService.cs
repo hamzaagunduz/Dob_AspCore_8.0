@@ -47,5 +47,19 @@ namespace Infrastructure.Persistence.Services
 
             return relativePath;
         }
+
+        public async Task DeleteFileAsync(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath)) return;
+
+            var fullPath = Path.Combine(_environment.WebRootPath, filePath);
+
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
+
+            await Task.CompletedTask;
+        }
     }
 }

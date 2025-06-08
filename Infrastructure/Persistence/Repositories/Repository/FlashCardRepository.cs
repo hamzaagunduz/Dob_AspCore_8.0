@@ -22,6 +22,29 @@ public class FlashCardRepository : IFlashCardRepository
             .ToListAsync();
     }
 
+    public async Task<FlashCard> GetByIdAsync(int id)
+    {
+        return await _context.FlashCards.FindAsync(id);
+    }
+
+    public async Task CreateAsync(FlashCard entity)
+    {
+        await _context.FlashCards.AddAsync(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(FlashCard entity)
+    {
+        _context.FlashCards.Update(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(FlashCard entity)
+    {
+        _context.FlashCards.Remove(entity);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task AddAsync(AppUserFlashCard entity)
     {
         _context.Set<AppUserFlashCard>().Add(entity);

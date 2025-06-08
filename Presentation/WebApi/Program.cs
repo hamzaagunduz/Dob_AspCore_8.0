@@ -5,6 +5,8 @@ using Application.Interfaces.IFileStorageService;
 using Application.Interfaces.IFlashCardRepository;
 using Application.Interfaces.IQuestionRepository;
 using Application.Interfaces.IShopRepository;
+using Application.Interfaces.ITestGroupRepository;
+
 
 //using Application.Interfaces.IShopRepository;
 using Application.Interfaces.ITopicRepository;
@@ -106,6 +108,7 @@ builder.Services.AddScoped(typeof(IUserDailyMissionRepository), typeof(UserDaily
 builder.Services.AddScoped(typeof(IShopRepository), typeof(ShopRepository));
 builder.Services.AddScoped(typeof(IUserTopicPerformanceRepository), typeof(UserTopicPerformanceRepository));
 builder.Services.AddScoped(typeof(IFileStorageService), typeof(FileStorageService));
+builder.Services.AddScoped(typeof(ITestGroupRepository), typeof(TestGroupRepository));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 

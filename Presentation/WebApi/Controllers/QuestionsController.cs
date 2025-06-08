@@ -90,6 +90,14 @@ namespace WebApi.Controllers
             return Ok(questionId);
         }
 
+        [HttpPut("update-full-question")]
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> UpdateFullQuestion([FromForm] UpdateFullQuestionCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok("Question and related data successfully updated");
+        }
+
 
     }
 }
