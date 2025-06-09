@@ -63,6 +63,21 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveShopItem(int id)
+        {
+            await _mediator.Send(new RemoveShopItemCommand { Id = id });
+            return Ok(new { message = "Shop item deleted successfully." });
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateShopItem([FromBody] UpdateShopItemCommand command)
+        {
+
+
+            await _mediator.Send(command);
+            return Ok(new { message = "Shop item updated successfully." });
+        }
 
     }
 }

@@ -22,5 +22,17 @@ namespace WebApi.Controllers
             var id = await _mediator.Send(command);
             return Ok(new { id });
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Update( [FromBody] UpdateTestGroupCommand command)
+        {
+  
+
+            var success = await _mediator.Send(command);
+            if (!success)
+                return NotFound("Test group not found.");
+
+            return NoContent();
+        }
     }
 }

@@ -34,27 +34,40 @@ namespace Application.Features.Mediator.Handlers.QuestionHandlers
         {
             // 1. Fetch existing question
             var question = await _questionRepository.GetByIdAsync(request.QuestionID);
-            if (question == null) throw new Exception("Question not found");
+            if (question == null) throw new Exception("Soru bulunamadı");
 
-            // 2. Update question properties
-            question.Text = request.QuestionText;
-            question.OptionA = request.OptionA;
-            question.OptionB = request.OptionB;
-            question.OptionC = request.OptionC;
-            question.OptionD = request.OptionD;
-            question.OptionE = request.OptionE;
-            question.TestID = request.TestId;
-            question.Answer = request.Answer;
+            // 2. Partial update - only modify provided values
+            if (!string.IsNullOrWhiteSpace(request.QuestionText))
+                question.Text = request.QuestionText;
+
+            if (!string.IsNullOrWhiteSpace(request.OptionA))
+                question.OptionA = request.OptionA;
+
+            if (!string.IsNullOrWhiteSpace(request.OptionB))
+                question.OptionB = request.OptionB;
+
+            if (!string.IsNullOrWhiteSpace(request.OptionC))
+                question.OptionC = request.OptionC;
+
+            if (!string.IsNullOrWhiteSpace(request.OptionD))
+                question.OptionD = request.OptionD;
+
+            if (!string.IsNullOrWhiteSpace(request.OptionE))
+                question.OptionE = request.OptionE;
+
+
+
+                question.Answer = request.Answer;
 
             await _questionRepository.UpdateAsync(question);
 
-            // 3. Handle image updates
-            await UpdateQuestionImage(request.QuestionImage, QuestionImageType.Question, question.QuestionID, cancellationToken);
-            await UpdateQuestionImage(request.OptionAImage, QuestionImageType.OptionA, question.QuestionID, cancellationToken);
-            await UpdateQuestionImage(request.OptionBImage, QuestionImageType.OptionB, question.QuestionID, cancellationToken);
-            await UpdateQuestionImage(request.OptionCImage, QuestionImageType.OptionC, question.QuestionID, cancellationToken);
-            await UpdateQuestionImage(request.OptionDImage, QuestionImageType.OptionD, question.QuestionID, cancellationToken);
-            await UpdateQuestionImage(request.OptionEImage, QuestionImageType.OptionE, question.QuestionID, cancellationToken);
+            // 3. Handle image updates (only process if file is provided)
+            await ProcessImageUpdate(request.QuestionImage, QuestionImageType.Question, question.QuestionID, cancellationToken);
+            await ProcessImageUpdate(request.OptionAImage, QuestionImageType.OptionA, question.QuestionID, cancellationToken);
+            await ProcessImageUpdate(request.OptionBImage, QuestionImageType.OptionB, question.QuestionID, cancellationToken);
+            await ProcessImageUpdate(request.OptionCImage, QuestionImageType.OptionC, question.QuestionID, cancellationToken);
+            await ProcessImageUpdate(request.OptionDImage, QuestionImageType.OptionD, question.QuestionID, cancellationToken);
+            await ProcessImageUpdate(request.OptionEImage, QuestionImageType.OptionE, question.QuestionID, cancellationToken);
 
             // 4. Handle flashcard operations
             await HandleFlashCardUpdate(request, question.QuestionID);
@@ -62,11 +75,11 @@ namespace Application.Features.Mediator.Handlers.QuestionHandlers
             return ;
         }
 
-        private async Task UpdateQuestionImage(IFormFile? imageFile, QuestionImageType imageType, int questionId, CancellationToken cancellationToken)
+        private async Task ProcessImageUpdate(IFormFile? imageFile, QuestionImageType imageType, int questionId, CancellationToken cancellationToken)
         {
-            if (imageFile == null) return;
+            // Skip if no file provided
+            if (imageFile == null || imageFile.Length == 0) return;
 
-            // Get existing image
             var existingImage = await _questionImageRepository.GetByQuestionIdAndTypeAsync(questionId, imageType);
 
             // Delete old file if exists
@@ -78,59 +91,66 @@ namespace Application.Features.Mediator.Handlers.QuestionHandlers
             // Upload new file
             var newImagePath = await _fileStorageService.SaveFileAsync(imageFile, "question-images", cancellationToken);
 
-            // Create or update image record
             if (existingImage != null)
             {
+                // Update existing image record
                 existingImage.ImageUrl = newImagePath;
                 await _questionImageRepository.UpdateImgAsync(existingImage);
             }
             else
             {
-                var newImage = new QuestionImage
+                // Create new image record
+                await _questionImageRepository.AddImgAsync(new QuestionImage
                 {
                     QuestionID = questionId,
                     Type = imageType,
                     ImageUrl = newImagePath
-                };
-                await _questionImageRepository.AddImgAsync(newImage);
+                });
             }
         }
 
         private async Task HandleFlashCardUpdate(UpdateFullQuestionCommand request, int questionId)
         {
-            // Get existing flashcard by question ID
             var existingFlashCards = await _flashCardRepository.GetFlashCardsByQuestionIdAsync(questionId);
             var existingFlashCard = existingFlashCards.FirstOrDefault();
 
-            // Case 1: Remove flashcard if requested or both fields empty
-            if (request.RemoveFlashCard ||
-               (string.IsNullOrWhiteSpace(request.FlashCardFront) &&
-                string.IsNullOrWhiteSpace(request.FlashCardBack)))
+            // Handle flashcard removal
+            if (request.RemoveFlashCard)
             {
                 if (existingFlashCard != null)
                 {
-                    // Implement flashcard deletion in your repository
                     await _flashCardRepository.DeleteAsync(existingFlashCard);
                 }
                 return;
             }
 
-            // Case 2: Update or create flashcard
+            // Skip update if no flashcard data provided
+            if (string.IsNullOrWhiteSpace(request.FlashCardFront) &&
+                string.IsNullOrWhiteSpace(request.FlashCardBack))
+            {
+                return;
+            }
+
             if (existingFlashCard != null)
             {
-                existingFlashCard.Front = request.FlashCardFront ?? "";
-                existingFlashCard.Back = request.FlashCardBack ?? "";
+                // Partial update - only modify provided values
+                if (!string.IsNullOrWhiteSpace(request.FlashCardFront))
+                    existingFlashCard.Front = request.FlashCardFront;
+
+                if (!string.IsNullOrWhiteSpace(request.FlashCardBack))
+                    existingFlashCard.Back = request.FlashCardBack;
+
                 await _flashCardRepository.UpdateAsync(existingFlashCard);
             }
             else
             {
-                var newFlashCard = new FlashCard
+                // Create new flashcard with provided values
+                await _flashCardRepository.CreateAsync(new FlashCard
                 {
                     Front = request.FlashCardFront ?? "",
                     Back = request.FlashCardBack ?? "",
                     QuestionID = questionId
-                };
-                await _flashCardRepository.CreateAsync(newFlashCard);
+                });
             }
         }
     }

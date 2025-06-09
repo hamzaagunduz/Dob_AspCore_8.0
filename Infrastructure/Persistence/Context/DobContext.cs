@@ -31,6 +31,7 @@ namespace Persistence.Context
         public DbSet<UserTopicPerformance> UserTopicPerformances { get; set; }
         public DbSet<QuestionImage> QuestionImages { get; set; }
         public DbSet<TestGroup> TestGroups { get; set; }
+        public DbSet<DiamondPackItem> DiamondPackItems { get; set; }
 
 
     }
