@@ -10,7 +10,6 @@ using System.Security.Claims;
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
 
     [ApiController]
     public class AppUserController : ControllerBase
@@ -167,6 +166,20 @@ namespace WebApi.Controllers
 
             return Ok("Purchase successful.");
         }
+
+        [HttpPut("ban")]
+        public async Task<IActionResult> BanUser([FromBody] BanUserCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
 
     }
 }

@@ -13,11 +13,7 @@ namespace Domain.Entities
         public string? Description { get; set; } // Test başlığı
         public string? Description2 { get; set; } // Test başlığı
 
-        // Yabancı Anahtar
-        //public int TopicID { get; set; } // Hangi konuya ait
-        //public Topic Topic { get; set; } // İlişki
 
-        // Bire-Çoğul İlişki: Test -> Question
         public int? TestGroupID { get; set; }
         public TestGroup? TestGroup { get; set; }
         public ICollection<Question> Questions { get; set; }

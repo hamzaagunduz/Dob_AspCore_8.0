@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.ITestGroupRepository;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,14 @@ namespace Persistence.Repositories.Repository
             _context.TestGroups.Add(testGroup);
             await _context.SaveChangesAsync();
             return testGroup;
+        }
+
+        public async Task<Test?> GetTestWithGroupAndTopicAsync(int testId)
+        {
+            return await _context.Tests
+                .Include(t => t.TestGroup)
+                .ThenInclude(g => g.Topic)
+                .FirstOrDefaultAsync(t => t.TestID == testId);
         }
     }
 }

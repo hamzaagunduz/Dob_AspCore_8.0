@@ -43,5 +43,12 @@ namespace Persistence.Repositories.Repository
 
             return (user, statistics ?? new UserStatistics()); // Eğer kayıt yoksa boş nesne dön
         }
+
+        public async Task<IEnumerable<UserStatistics>> GetByUserIdsAsync(IEnumerable<int> userIds)
+        {
+            return await _context.UserStatistics
+                .Where(s => userIds.Contains(s.AppUserId))
+                .ToListAsync();
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace Application.Interfaces.IUserStatisticsRepository
         Task AddAsync(UserStatistics stats);
         Task UpdateAsync(UserStatistics stats);
         Task<(AppUser user, UserStatistics statistics)> GetUserAndStatisticsAsync(int userId);
+        Task<IEnumerable<UserStatistics>> GetByUserIdsAsync(IEnumerable<int> userIds); // New method
 
     }
 }

@@ -31,6 +31,7 @@ namespace Application.Features.Mediator.Handlers.AppUserHandlers
                 Email = request.Email,
                 ImageURL = request.ImageURL,
                 ExamID = request.ExamID,
+                Ban=false,
             };
 
             IdentityResult result = await _userManager.CreateAsync(newUser, request.Password);

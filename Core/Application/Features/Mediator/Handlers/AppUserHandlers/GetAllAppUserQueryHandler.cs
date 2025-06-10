@@ -1,6 +1,7 @@
 ﻿using Application.Features.Mediator.Queries.AppUserQueries;
 using Application.Features.Mediator.Results.AppUserResults;
 using Application.Interfaces;
+using Application.Interfaces.IUserStatisticsRepository;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -14,23 +15,54 @@ namespace Application.Features.Mediator.Handlers.AppUserHandlers
     public class GetAllAppUserQueryHandler : IRequestHandler<GetAllAppUserQuery, List<GetAllAppUserQueryResult>>
     {
         private readonly IRepository<AppUser> _repository;
+        private readonly IUserStatisticsRepository _userStatisticsRepository;
 
-        public GetAllAppUserQueryHandler(IRepository<AppUser> repository)
+        public GetAllAppUserQueryHandler(
+            IRepository<AppUser> repository,
+            IUserStatisticsRepository userStatisticsRepository)
         {
             _repository = repository;
+            _userStatisticsRepository = userStatisticsRepository;
         }
-        public async Task<List<GetAllAppUserQueryResult>> Handle(GetAllAppUserQuery request, CancellationToken cancellationToken)
-        {
-            var values = await _repository.GetAllAsync();
 
-            return values.Select(x => new GetAllAppUserQueryResult
+        public async Task<List<GetAllAppUserQueryResult>> Handle(
+            GetAllAppUserQuery request,
+            CancellationToken cancellationToken)
+        {
+            var users = await _repository.GetAllAsync();
+            var userIds = users.Select(u => u.Id).ToList();
+
+            // Fetch all statistics in a single query
+            var statisticsDict = (await _userStatisticsRepository.GetByUserIdsAsync(userIds))
+                .ToDictionary(s => s.AppUserId);
+
+            return users.Select(user =>
             {
-                UserId = x.Id,
-                Email = x.Email,
-                SurName = x.SurName,
-                ExamID = x.ExamID,
-                FirstName = x.FirstName,
-                ImageURL = x.ImageURL
+                var stats = statisticsDict.GetValueOrDefault(user.Id) ?? new UserStatistics();
+
+                return new GetAllAppUserQueryResult
+                {
+                    // Existing user properties
+                    UserId = user.Id,
+                    Email = user.Email,
+                    SurName = user.SurName,
+                    ExamID = user.ExamID,
+                    FirstName = user.FirstName,
+                    ImageURL = user.ImageURL,
+                    Ban = user.Ban,
+                    Diamond = user.Diamond,
+                    LastLifeAddedTime = user.LastLifeAddedTime,
+
+                    // Statistics properties
+                    TotalScore = stats.TotalScore,
+                    TotalTestsCompleted = stats.TotalTestsCompleted,
+                    PerfectTestsCompleted = stats.PerfectTestsCompleted,
+                    AverageScore = stats.Score, // Mapped to renamed property
+                    League = stats.League,
+                    ConsecutiveDays = stats.ConsecutiveDays,
+                    ConsecutiveDaysTemp = stats.ConsecutiveDaysTemp,
+                    LastTestDate = stats.LastTestDate
+                };
             }).ToList();
         }
     }

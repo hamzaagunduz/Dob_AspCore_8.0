@@ -13,6 +13,7 @@ namespace Domain.Entities
         public string FirstName { get; set; }
         public string SurName { get; set; }
         public string Email { get; set; }
+        public bool? Ban { get; set; }
         public string? ImageURL { get; set; } //Profil Resmi
         public int? ExamID { get; set; } // Hangi Sınava Çalıştığı
         public int Lives { get; set; } = 10;

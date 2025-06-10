@@ -10,5 +10,8 @@ namespace Application.Interfaces.ITestGroupRepository
     public interface ITestGroupRepository
     {
         Task<TestGroup> AddAsync(TestGroup testGroup);
+
+        Task<Test?> GetTestWithGroupAndTopicAsync(int testId);
+
     }
 }
