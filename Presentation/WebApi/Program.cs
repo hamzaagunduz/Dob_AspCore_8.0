@@ -5,6 +5,7 @@ using Application.Interfaces.ICurrentUserContext;
 using Application.Interfaces.IExamRepository;
 using Application.Interfaces.IFileStorageService;
 using Application.Interfaces.IFlashCardRepository;
+using Application.Interfaces.IPaymentService;
 using Application.Interfaces.IQuestionRepository;
 using Application.Interfaces.IShopRepository;
 using Application.Interfaces.ISystemMetricsService.cs;
@@ -29,6 +30,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.SemanticKernel;
 using OpenAI;
 using Persistence.Context;
+using Persistence.Hubs;
 using Persistence.Repositories;
 using Persistence.Repositories.Repository;
 using Persistence.Repositories.Repository.Infrastructure.Persistence.Repositories;
@@ -117,6 +119,7 @@ builder.Services.AddScoped(typeof(ICurrentUserContext), typeof(CurrentUserContex
 builder.Services.AddScoped(typeof(IAppUserRepository), typeof(AppUserRepository));
 builder.Services.AddScoped(typeof(IUserLoginHistoryRepository), typeof(UserLoginHistoryRepository));
 builder.Services.AddScoped<ISystemMetricsService, SystemMetricsService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
@@ -237,6 +240,7 @@ app.UseAuthentication();  // Add this line to ensure authentication middleware i
 app.UseAuthorization();
 
 app.MapHub<AIHub>("ai-hub");
+app.MapHub<PayHub>("/payHub");
 
 app.MapControllers();
 
