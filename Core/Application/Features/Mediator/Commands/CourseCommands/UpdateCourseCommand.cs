@@ -14,6 +14,5 @@ namespace Application.Features.Mediator.Commands.CourseCommands
         public string? Description { get; set; }
         public string? IconURL { get; set; }
 
-        public int ExamID { get; set; }
     }
 }

@@ -1,16 +1,20 @@
 using Application.Interfaces;
+using Application.Interfaces.IAppUserRepository;
 using Application.Interfaces.ICourseRepository;
+using Application.Interfaces.ICurrentUserContext;
 using Application.Interfaces.IExamRepository;
 using Application.Interfaces.IFileStorageService;
 using Application.Interfaces.IFlashCardRepository;
 using Application.Interfaces.IQuestionRepository;
 using Application.Interfaces.IShopRepository;
+using Application.Interfaces.ISystemMetricsService.cs;
 using Application.Interfaces.ITestGroupRepository;
 
 
 //using Application.Interfaces.IShopRepository;
 using Application.Interfaces.ITopicRepository;
 using Application.Interfaces.IUserDailyMissionRepository;
+using Application.Interfaces.IUserLoginHistoryRepository;
 using Application.Interfaces.IUserRepository;
 using Application.Interfaces.IUserStatisticsRepository;
 using Application.Interfaces.IUserTopicPerformanceRepository;
@@ -109,6 +113,10 @@ builder.Services.AddScoped(typeof(IShopRepository), typeof(ShopRepository));
 builder.Services.AddScoped(typeof(IUserTopicPerformanceRepository), typeof(UserTopicPerformanceRepository));
 builder.Services.AddScoped(typeof(IFileStorageService), typeof(FileStorageService));
 builder.Services.AddScoped(typeof(ITestGroupRepository), typeof(TestGroupRepository));
+builder.Services.AddScoped(typeof(ICurrentUserContext), typeof(CurrentUserContext));
+builder.Services.AddScoped(typeof(IAppUserRepository), typeof(AppUserRepository));
+builder.Services.AddScoped(typeof(IUserLoginHistoryRepository), typeof(UserLoginHistoryRepository));
+builder.Services.AddScoped<ISystemMetricsService, SystemMetricsService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 

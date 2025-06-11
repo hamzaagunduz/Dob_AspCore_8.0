@@ -15,5 +15,8 @@ namespace Application.Interfaces.IUserStatisticsRepository
         Task<(AppUser user, UserStatistics statistics)> GetUserAndStatisticsAsync(int userId);
         Task<IEnumerable<UserStatistics>> GetByUserIdsAsync(IEnumerable<int> userIds); // New method
 
+        Task<double> GetAverageTestCompletionAsync();
+
+
     }
 }

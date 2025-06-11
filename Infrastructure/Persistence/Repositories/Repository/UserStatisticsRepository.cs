@@ -50,5 +50,9 @@ namespace Persistence.Repositories.Repository
                 .Where(s => userIds.Contains(s.AppUserId))
                 .ToListAsync();
         }
+        public async Task<double> GetAverageTestCompletionAsync()
+        {
+            return await _context.UserStatistics.AverageAsync(us => us.TotalTestsCompleted);
+        }
     }
 }

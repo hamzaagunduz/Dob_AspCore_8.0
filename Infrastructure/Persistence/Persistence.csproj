@@ -8,7 +8,8 @@
 
   <ItemGroup>
 	  <!--Webenv için eklendi-->
-	  <FrameworkReference Include="Microsoft.AspNetCore.App" /> 
+	  <FrameworkReference Include="Microsoft.AspNetCore.App" />
+	  <PackageReference Include="Hardware.Info" Version="101.0.1.1" /> 
 
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />

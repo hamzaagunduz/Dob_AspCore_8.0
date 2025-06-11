@@ -1,5 +1,7 @@
 ﻿using Application.Features.Mediator.Commands.AppUserCommands;
 using Application.Features.Mediator.Results.AppUserResults;
+using Application.Interfaces;
+using Application.Interfaces.ICurrentUserContext;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -15,10 +17,14 @@ namespace Application.Features.Mediator.Handlers.AppUserHandlers
     {
 
         private readonly UserManager<AppUser> _userManager;
+        private readonly ICurrentUserContext _currentUserContext;
+        private readonly IRepository<UserLoginHistory> _userLoginHistoryRepository;
 
-        public GetCheckAppUserQueryHandler(UserManager<AppUser> userManager)
+        public GetCheckAppUserQueryHandler(UserManager<AppUser> userManager, ICurrentUserContext currentUserContext, IRepository<UserLoginHistory> userLoginHistoryRepository)
         {
             _userManager = userManager;
+            _currentUserContext = currentUserContext;
+            _userLoginHistoryRepository = userLoginHistoryRepository;
         }
 
         public async Task<GetCheckAppUserQueryResult> Handle(GetCheckAppUserQuery request, CancellationToken cancellationToken)
@@ -40,7 +46,19 @@ namespace Application.Features.Mediator.Handlers.AppUserHandlers
                 values.UserName = user.UserName;
                 values.Id = user.Id;
                 var userRoles = await _userManager.GetRolesAsync(user);
-                values.Roles = userRoles.ToList(); 
+                values.Roles = userRoles.ToList();
+
+                var loginHistory = new UserLoginHistory
+                {
+                    UserId = user?.Id.ToString(),
+                    UserName = user?.UserName,
+                    LoginTime = DateTime.UtcNow,
+                    IpAddress = _currentUserContext.IpAddress,
+                    UserAgent = _currentUserContext.UserAgent
+                };
+
+                await _userLoginHistoryRepository.CreateAsync(loginHistory);
+                return values;
 
             }
             return values;
