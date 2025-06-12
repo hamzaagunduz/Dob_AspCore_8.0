@@ -17,6 +17,8 @@ namespace Persistence.Repositories
         {
             _context = context;
         }
+        public IQueryable<T> Table => _context.Set<T>().AsQueryable();
+
         public async Task CreateAsync(T entity)
         {
             _context.Set<T>().Add(entity);

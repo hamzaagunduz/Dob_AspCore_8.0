@@ -53,5 +53,26 @@ namespace WebApi.Controllers
             await _mediator.Send(new RemoveTestCommand(id));
             return Ok("Test successfully removed.");
         }
+        [HttpGet("get-test-with-questions/{id}")]
+        public async Task<IActionResult> GetTestWithQuestions(int id)
+        {
+            // Token'dan kullanıcı ID'sini al
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized(new { error = "Geçersiz token veya kullanıcı bulunamadı." });
+
+            // Query'yi oluştur ve token'dan gelen userId'yi ekle
+            var query = new GetTestWithQuestionsQuery(id, userId);
+
+
+            var result = await _mediator.Send(query);
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+
     }
 }
