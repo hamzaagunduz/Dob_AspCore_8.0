@@ -21,6 +21,7 @@ using Application.Interfaces.IUserStatisticsRepository;
 using Application.Interfaces.IUserTopicPerformanceRepository;
 using Application.Services;
 using Application.Tools;
+using Application.Validators;
 using Domain.Entities;
 using Infrastructure.Persistence.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -31,6 +32,7 @@ using Microsoft.SemanticKernel;
 using OpenAI;
 using Persistence.Context;
 using Persistence.Hubs;
+using Persistence.Identity;
 using Persistence.Repositories;
 using Persistence.Repositories.Repository;
 using Persistence.Repositories.Repository.Infrastructure.Persistence.Repositories;
@@ -120,6 +122,9 @@ builder.Services.AddScoped(typeof(IAppUserRepository), typeof(AppUserRepository)
 builder.Services.AddScoped(typeof(IUserLoginHistoryRepository), typeof(UserLoginHistoryRepository));
 builder.Services.AddScoped<ISystemMetricsService, SystemMetricsService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
+builder.Services.AddTransient<IUserValidator<AppUser>, CustomUserValidator>();
+
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
@@ -138,11 +143,18 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
 
 builder.Services.AddIdentity<AppUser, AppRole>(options =>
 {
-    //options.User.RequireUniqueEmail = false;
+    // Validasyon ayarlarý
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 1;
 
+    options.User.RequireUniqueEmail = false;
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 })
-.AddEntityFrameworkStores<DobContext>();
+.AddEntityFrameworkStores<DobContext>()
+.AddErrorDescriber<CustomIdentityErrorDescriber>();
 
 
 builder.Services.AddAuthentication(options =>
