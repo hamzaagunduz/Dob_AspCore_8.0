@@ -8,6 +8,7 @@ namespace Application.Features.Mediator.Results.PaymentResults
 {
     public sealed record CreatePaymentResult(
          string HtmlContent,
-         string ConversationId
+         string ConversationId,
+         string errorMessage
      );
 }

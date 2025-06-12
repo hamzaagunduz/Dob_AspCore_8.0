@@ -25,7 +25,8 @@ namespace WebApi.Controllers
             return Ok(new
             {
                 Content = result.HtmlContent,
-                ConversationId = result.ConversationId
+                ConversationId = result.ConversationId,
+                errorMessage = result.errorMessage
             });
         }
 

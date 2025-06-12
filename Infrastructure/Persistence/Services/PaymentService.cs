@@ -22,7 +22,8 @@ namespace Persistence.Services
         private readonly IHubContext<PayHub> _hubContext;
         Iyzipay.Options options = new()
         {
-         
+            //ApiKey = "sandbox-NOZ4xKWVStD11ryygd9WFNtwVX3pftih",
+            //SecretKey = "sandbox-NdKhyJ3pCMqGzYpC2ThagRDSTNFLiXUu",
             BaseUrl = "https://sandbox-api.iyzipay.com"
         };
         public PaymentService(IHubContext<PayHub> hubContext)
@@ -126,7 +127,8 @@ namespace Persistence.Services
 
             return new CreatePaymentResult(
                 HtmlContent: threedsInitialize.HtmlContent,
-                ConversationId: request.ConversationId
+                ConversationId: request.ConversationId,
+                errorMessage:threedsInitialize.ErrorMessage
             );
 
         }
@@ -134,24 +136,40 @@ namespace Persistence.Services
         public async Task HandleCallbackAsync(PaymentCallback callbackData)
         {
             CreateThreedsPaymentRequest request = new CreateThreedsPaymentRequest();
-            request.Locale = Locale.TR.ToString();  
+            request.Locale = Locale.TR.ToString();
             request.ConversationId = callbackData.ConversationId;
             request.PaymentId = callbackData.PaymentId;
             request.ConversationData = callbackData.ConversationData;
 
             ThreedsPayment threedsPayment = await ThreedsPayment.Create(request, options);
 
-
-            if (callbackData.Status != "success")
+            var responseCheck = new
             {
-                throw new Exception("Ödeme başarısız oldu!");
-            }
-            string json = JsonSerializer.Serialize(callbackData);
-            Console.WriteLine(json);
+                status = threedsPayment.Status, // "success" veya "failure"
+                paymentId = threedsPayment.PaymentId,
+                conversationData = new
+                {
+                    conversationId = threedsPayment.ConversationId,
+                    mdStatus = threedsPayment.MdStatus
+                }
+            };
 
-            await _hubContext.Clients
-                .Client(PayHub.TransactionConnections[callbackData.ConversationId])
-                .SendAsync("Receive", callbackData);
+            // Client bağlantısını kontrol et
+            if (PayHub.TransactionConnections.TryGetValue(threedsPayment.ConversationId, out var connectionId))
+            {
+                await _hubContext.Clients
+                    .Client(connectionId)
+                    .SendAsync("Receive", responseCheck);
+            }
+
+            // Başarısızsa exception fırlatma, sadece bildir
+            if (threedsPayment.Status != "success")
+            {
+                return; // Hata SignalR ile bildirildi, işlem sonlandırıldı
+            }
+
+            // Başarılıysa başka işlem yapabilirsin burada (veritabanına kayıt vb.)
         }
+
     }
 }
