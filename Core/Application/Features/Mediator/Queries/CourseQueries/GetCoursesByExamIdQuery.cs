@@ -10,11 +10,13 @@ namespace Application.Features.Mediator.Queries.CourseQueries
 {
     public class GetCoursesByExamIdQuery : IRequest<List<GetCoursesByExamIdQueryResult>>
     {
-        public int ExamID { get; set; }
-
-        public GetCoursesByExamIdQuery(int examId)
+        public GetCoursesByExamIdQuery(int userId)
         {
-            ExamID = examId;
+            this.userId = userId;
         }
+
+        public int userId { get; set; }
+
+    
     }
 }

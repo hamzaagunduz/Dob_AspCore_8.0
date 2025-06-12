@@ -34,11 +34,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> PayCallBack([FromForm] IFormCollection form)
         {
-            foreach (var key in form.Keys)
-            {
-                var value = form[key];
-                Console.WriteLine($"{key}: {value}");
-            }
+
             var callbackData = new PaymentCallback
             {
                 Status = form["status"],

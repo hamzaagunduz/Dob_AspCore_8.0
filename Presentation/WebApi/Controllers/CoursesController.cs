@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
@@ -52,14 +53,19 @@ namespace WebApi.Controllers
             await _mediator.Send(new RemoveCourseCommand(id));
             return Ok("Course successfully removed.");
         }
-
-        [HttpGet("GetCoursesByExamId/{examId}")]
-        public async Task<IActionResult> GetCoursesByExamId(int examId)
+        [HttpGet("GetCoursesByExamId")]
+        public async Task<IActionResult> GetCoursesByExamId()
         {
-            var query = new GetCoursesByExamIdQuery(examId);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var query = new GetCoursesByExamIdQuery(Convert.ToInt32(userId));
             var result = await _mediator.Send(query);
             return Ok(result);
         }
+
 
     }
 }

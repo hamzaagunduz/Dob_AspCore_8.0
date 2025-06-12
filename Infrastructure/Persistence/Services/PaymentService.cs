@@ -22,7 +22,8 @@ namespace Persistence.Services
         private readonly IHubContext<PayHub> _hubContext;
         Iyzipay.Options options = new()
         {
-       
+            ApiKey = "sandbox-NOZ4xKWVStD11ryygd9WFNtwVX3pftih",
+            SecretKey = "sandbox-NdKhyJ3pCMqGzYpC2ThagRDSTNFLiXUu",
             BaseUrl = "https://sandbox-api.iyzipay.com"
         };
         public PaymentService(IHubContext<PayHub> hubContext)
@@ -161,13 +162,11 @@ namespace Persistence.Services
                     .SendAsync("Receive", responseCheck);
             }
 
-            // Başarısızsa exception fırlatma, sadece bildir
             if (threedsPayment.Status != "success")
             {
-                return; // Hata SignalR ile bildirildi, işlem sonlandırıldı
+                return;
             }
 
-            // Başarılıysa başka işlem yapabilirsin burada (veritabanına kayıt vb.)
         }
 
     }

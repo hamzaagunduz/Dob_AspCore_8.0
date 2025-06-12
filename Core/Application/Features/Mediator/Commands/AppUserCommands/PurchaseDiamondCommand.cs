@@ -12,8 +12,8 @@ namespace Application.Features.Mediator.Commands.AppUserCommands
         public int UserId { get; set; }
         public int DiamondCount { get; set; }
         public decimal Amount { get; set; } // Satın alınan elmas karşılığı tutar
-        public string CardNumber { get; set; }
-        public string CardHolderName { get; set; }
-        public string CVV { get; set; }
+        //public string CardNumber { get; set; }
+        //public string CardHolderName { get; set; }
+        //public string CVV { get; set; }
     }
 }
