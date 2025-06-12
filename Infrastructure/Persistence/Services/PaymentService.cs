@@ -22,8 +22,7 @@ namespace Persistence.Services
         private readonly IHubContext<PayHub> _hubContext;
         Iyzipay.Options options = new()
         {
-            //ApiKey = "sandbox-NOZ4xKWVStD11ryygd9WFNtwVX3pftih",
-            //SecretKey = "sandbox-NdKhyJ3pCMqGzYpC2ThagRDSTNFLiXUu",
+       
             BaseUrl = "https://sandbox-api.iyzipay.com"
         };
         public PaymentService(IHubContext<PayHub> hubContext)
