@@ -66,6 +66,19 @@ namespace WebApi.Controllers
             return Ok("Exam successfully selected.");
         }
 
+
+        [HttpGet("get-all-with-selected")]
+        public async Task<IActionResult> GetAllWithSelected()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized(new { error = "Geçersiz token veya kullanıcı bulunamadı." });
+
+            var result = await _mediator.Send(new GetAllExamWithSelectedQuery { UserId = userId });
+            return Ok(result);
+        }
+
     }
 }
 

@@ -3,6 +3,7 @@ using Application.Features.Mediator.Queries.DiamondPackItemQuery;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
@@ -23,6 +24,22 @@ namespace WebApi.Controllers
             var query = new GetDiamondPackItemQuery();
             var values = await _mediator.Send(query);
             return Ok(values);
+        }
+        [HttpGet("diamond-packs")]
+        public async Task<IActionResult> GetUserDiamondPacks()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                return Unauthorized("Geçerli kullanıcı kimliği bulunamadı.");
+
+            var query = new GetUserDiamondPackQuery
+            {
+                UserId = userId
+            };
+
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]

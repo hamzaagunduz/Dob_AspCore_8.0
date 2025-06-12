@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Mediator.Results.ShopResults
 {
+
+    public class ShopItemsWithDiamondQueryResult
+    {
+        public int UserDiamondCount { get; set; }
+        public List<ShopItemWithUserStatusQueryResult> Items { get; set; }
+    }
+
     public class ShopItemWithUserStatusQueryResult
     {
         public int Id { get; set; }
@@ -17,5 +24,8 @@ namespace Application.Features.Mediator.Results.ShopResults
         public int DurationInDays { get; set; }
         public bool IsPurchased { get; set; }
         public int RemainingDays { get; set; }
+
+       
+
     }
 }

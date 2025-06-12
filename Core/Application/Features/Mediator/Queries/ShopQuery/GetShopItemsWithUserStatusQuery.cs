@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Mediator.Queries.ShopQuery
 {
-    public class GetShopItemsWithUserStatusQuery : IRequest<List<ShopItemWithUserStatusQueryResult>>
+    public class GetShopItemsWithUserStatusQuery : IRequest<ShopItemsWithDiamondQueryResult>
     {
+
+
         public int UserId { get; set; }
     }
 }
