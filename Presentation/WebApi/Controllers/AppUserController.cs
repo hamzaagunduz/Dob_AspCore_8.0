@@ -117,6 +117,23 @@ namespace WebApi.Controllers
             return Ok("Kullanıcının sınavı başarıyla güncellendi.");
         }
 
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                return Unauthorized("Geçerli bir kullanıcı bulunamadı.");
+
+            command.AppUserId = userId;
+
+            var result = await _mediator.Send(command);
+            if (result)
+                return Ok(new { message = "Şifre başarıyla değiştirildi." });
+
+            return BadRequest(new { error = "Şifre değiştirme işlemi başarısız oldu. Eski şifre yanlış olabilir." });
+        }
+
 
         [HttpPost("decreaselife")]
         public async Task<IActionResult> DecreaseLife()

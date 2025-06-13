@@ -47,7 +47,8 @@ namespace Application.Features.Mediator.Handlers.StatisticsHandlers
         PerfectTestsCompleted = stats.PerfectTestsCompleted,
         Score = stats.Score,
         League = stats.League,
-        ConsecutiveDays = stats.ConsecutiveDays
+        ConsecutiveDays = stats.ConsecutiveDays,
+        UserName=user.UserName
     };
         }
     }
