@@ -113,6 +113,25 @@ namespace WebApi.Controllers
             return Ok(result);
         }
 
+        // FlashCardsController.cs
+        [HttpGet("quiz-from-favorites")]
+        public async Task<IActionResult> GetQuizFromFavorites([FromQuery] int courseId)
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int appUserId))
+                return Unauthorized("Geçersiz token veya kullanıcı bulunamadı.");
+
+            var query = new GetQuizFromFavoritesQuery
+            {
+                AppUserId = appUserId,
+                CourseId = courseId
+            };
+
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+
 
     }
 }

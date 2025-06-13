@@ -33,6 +33,7 @@ namespace Persistence.Context
         public DbSet<TestGroup> TestGroups { get; set; }
         public DbSet<DiamondPackItem> DiamondPackItems { get; set; }
         public DbSet<UserLoginHistory> UserLoginHistories { get; set; }
+        public DbSet<AppUserFlashCard> AppUserFlashCards { get; set; }
 
 
 

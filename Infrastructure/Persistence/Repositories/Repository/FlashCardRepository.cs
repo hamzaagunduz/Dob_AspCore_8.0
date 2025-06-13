@@ -83,5 +83,28 @@ public class FlashCardRepository : IFlashCardRepository
             .ToListAsync();
 }
 
+    // FlashCardRepository.cs
+    public async Task<List<FlashCard>> GetRandomFavoriteFlashCardsByUserAsync(int appUserId, int courseId, int count)
+    {
+        return await _context.AppUserFlashCards
+            .Where(auf => auf.AppUserID == appUserId)
+            .Select(auf => auf.FlashCard)
+            .Where(fc => fc.Question.Test.TestGroup.Topic.CourseID == courseId)
+            .OrderBy(x => Guid.NewGuid())
+            .Take(count)
+            .ToListAsync();
+    }
+
+    public async Task<List<FlashCard>> GetRandomFlashCardsByCourseAsync(int courseId, int count, int excludeFlashCardId)
+    {
+        return await _context.FlashCards
+            .Where(fc =>
+                fc.Question.Test.TestGroup.Topic.CourseID == courseId &&
+                fc.FlashCardID != excludeFlashCardId)
+            .OrderBy(x => Guid.NewGuid())
+            .Take(count)
+            .ToListAsync();
+    }
+
 
 }

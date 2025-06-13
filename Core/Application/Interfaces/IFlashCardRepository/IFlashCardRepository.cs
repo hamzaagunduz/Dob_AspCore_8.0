@@ -21,6 +21,9 @@ namespace Application.Interfaces.IFlashCardRepository
 
         Task<List<FlashCard>> GetFlashCardsByTestIdAsync(int testId);
 
+        Task<List<FlashCard>> GetRandomFavoriteFlashCardsByUserAsync(int appUserId, int courseId, int count);
+        Task<List<FlashCard>> GetRandomFlashCardsByCourseAsync(int courseId, int count, int excludeFlashCardId);
+
 
 
     }
