@@ -10,6 +10,8 @@ namespace Application.Features.Mediator.Results.ExamResults
     {
         public int ExamID { get; set; }
         public string Name { get; set; }
+        public int? Order { get; set; }
+
         public DateTime? Year { get; set; }
     }
 }

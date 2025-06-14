@@ -25,12 +25,20 @@ namespace Application.Features.Mediator.Handlers.ExamHandlers
         }
         public async Task Handle(CreateExamCommand request, CancellationToken cancellationToken)
         {
-            await _repository.CreateAsync(new Exam
+            // Mevcut Exam'ler arasındaki en yüksek Order değerini bul
+            var exams = await _repository.GetAllAsync(); 
+            int maxOrder = exams.Any() ? exams.Max(e => e.Order ?? 0) : 0;
+
+            var newExam = new Exam
             {
                 Name = request.Name,
-                Year = request.Year
-            });
+                Year = request.Year,
+                Order = maxOrder + 1
+            };
+
+            await _repository.CreateAsync(newExam);
         }
+
     }
 
 

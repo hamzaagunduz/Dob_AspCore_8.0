@@ -23,14 +23,19 @@ namespace Application.Features.Mediator.Handlers.CourseHandlers
         public async Task<List<GetAllCourseQueryResult>> Handle(GetAllCourseQuery request, CancellationToken cancellationToken)
         {
             var courses = await _repository.GetAllAsync();
-            return courses.Select(c => new GetAllCourseQueryResult
-            {
-                CourseID = c.CourseID,
-                Name = c.Name,
-                Description = c.Description,
-                IconURL=c.IconURL,
-                ExamID = c.ExamID
-            }).ToList();
+
+            return courses
+                .OrderBy(c => c.Order ?? 0) // ✅ Order alanına göre sıralama
+                .Select(c => new GetAllCourseQueryResult
+                {
+                    CourseID = c.CourseID,
+                    Name = c.Name,
+                    Description = c.Description,
+                    IconURL = c.IconURL,
+                    ExamID = c.ExamID
+                })
+                .ToList();
         }
     }
+
 }

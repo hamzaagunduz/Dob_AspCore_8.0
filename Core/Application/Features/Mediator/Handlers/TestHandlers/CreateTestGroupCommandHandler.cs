@@ -17,12 +17,14 @@ namespace Application.Features.Mediator.Handlers.TestHandlers
 
         public async Task<int> Handle(CreateTestGroupCommand request, CancellationToken cancellationToken)
         {
+            var maxOrder = await _repository.GetMaxOrderByTopicIdAsync(request.TopicID);
+
             var testGroup = new TestGroup
             {
                 Title = request.Title,
                 Description = request.Description,
                 TopicID = request.TopicID,
-                test=request.test,
+                Order = maxOrder + 1 // En sona ekle
             };
 
             var created = await _repository.AddAsync(testGroup);

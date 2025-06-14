@@ -13,5 +13,10 @@ namespace Application.Interfaces.ITestGroupRepository
 
         Task<Test?> GetTestWithGroupAndTopicAsync(int testId);
 
+        Task<int> GetMaxOrderByTestGroupIdAsync(int testGroupId);
+
+        Task<int> GetMaxOrderByTopicIdAsync(int? topicId);
+
+
     }
 }

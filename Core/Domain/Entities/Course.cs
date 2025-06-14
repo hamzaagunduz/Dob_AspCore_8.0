@@ -17,6 +17,8 @@ namespace Domain.Entities
         // Yabancı Anahtar
         public int ExamID { get; set; } // Hangi sınava ait
         public Exam Exam { get; set; } // İlişki
+        public int? Order { get; set; }
+
 
         // Bire-Çoğul İlişki: Course -> Topic
         public ICollection<Topic> Topics { get; set; }

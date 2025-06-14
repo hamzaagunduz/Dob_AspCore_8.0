@@ -27,6 +27,7 @@ namespace Application.Features.Mediator.Handlers.CourseHandlers
                 course.Name = request.Name;
                 course.Description = request.Description;
                 course.IconURL = request.IconURL;
+                course.Order=request.Order;
                 await _repository.UpdateAsync(course);
             }
         }

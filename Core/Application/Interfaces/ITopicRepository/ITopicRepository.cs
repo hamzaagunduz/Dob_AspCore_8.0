@@ -10,6 +10,7 @@ namespace Application.Interfaces.ITopicRepository
     public interface ITopicRepository
     {
         Task<List<Topic>> GetTopicsWithTestsByCourseIdAsync(int examId);
+        Task<int> GetMaxOrderByCourseIdAsync(int courseId); // ✅ Yeni metot
 
     }
 }

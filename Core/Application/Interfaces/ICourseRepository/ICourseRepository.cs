@@ -10,5 +10,7 @@ namespace Application.Interfaces.ICourseRepository
     public interface ICourseRepository
     {
         Task<ICollection<Course>> GetCoursesByExamIdAsync(int examId);
+        Task<int> GetMaxOrderByExamIdAsync(int examId);
+
     }
 }

@@ -13,6 +13,8 @@ namespace Application.Features.Mediator.Commands.CourseCommands
         public string Name { get; set; }
         public string? Description { get; set; }
         public string? IconURL { get; set; }
+        public int? Order { get; set; }
+
 
     }
 }

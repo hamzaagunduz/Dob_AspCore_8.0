@@ -24,5 +24,12 @@ namespace Persistence.Repositories.Repository
                 .Include(c => c.Topics) // Eğer ilişkili Topic'leri de çekmek istiyorsanız
                 .ToListAsync();
         }
+        public async Task<int> GetMaxOrderByExamIdAsync(int examId)
+        {
+            return await _context.Set<Course>()
+                .Where(c => c.ExamID == examId)
+                .MaxAsync(c => (int?)c.Order) ?? 0; // Eğer hiç yoksa 0 döner
+        }
+
     }
 }

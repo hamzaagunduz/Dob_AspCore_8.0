@@ -23,23 +23,30 @@ namespace Application.Features.Mediator.Handlers.TopicHandlers
         {
             var topics = await _topicRepository.GetTopicsWithTestsByCourseIdAsync(request.CourseId);
 
-            return topics.Select(topic => new GetTopicsWithTestsByCourseIdQueryQueryResult
-            {
-                TopicID = topic.TopicID,
-                Name = topic.Name,
-                Description = topic.Description,
-                VideoLink = topic.VideoLink,
-                Tests = topic.TestGroups
-                    .SelectMany(tg => tg.Tests) // TestGroup içindeki tüm testleri düzleştiriyoruz
-                    .Select(test => new TestDto
-                    {
-                        TestID = test.TestID,
-                        Title = test.Title,
-                        Description = test.Description
-                    })
-                    .ToList()
-            }).ToList();
+            var orderedTopics = topics
+                .OrderBy(t => t.Order ?? 0)  // Order’a göre sırala, null ise 0 say
+
+                .Select(topic => new GetTopicsWithTestsByCourseIdQueryQueryResult
+                {
+                    TopicID = topic.TopicID,
+                    Name = topic.Name,
+                    Description = topic.Description,
+                    VideoLink = topic.VideoLink,
+                    Tests = topic.TestGroups
+                        .SelectMany(tg => tg.Tests)
+                        .Select(test => new TestDto
+                        {
+                            TestID = test.TestID,
+                            Title = test.Title,
+                            Description = test.Description
+                        })
+                        .ToList()
+                })
+                .ToList();
+
+            return orderedTopics;
         }
+
 
     }
 }

@@ -12,6 +12,7 @@ namespace Application.Features.Mediator.Results.TopicResults
         public string Name { get; set; }
         public string? Description { get; set; }
         public string? VideoLink { get; set; }
+        public int? Order { get; set; }
 
         public List<TestGroupDto> TestGroups { get; set; }
     }
@@ -21,6 +22,8 @@ namespace Application.Features.Mediator.Results.TopicResults
         public int TestGroupID { get; set; }
         public string Title { get; set; }
         public string? Description { get; set; }
+        public int? Order { get; set; }
+
         public List<TestDto> Tests { get; set; }
     }
 

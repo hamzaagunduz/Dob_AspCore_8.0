@@ -10,9 +10,9 @@ namespace Domain.Entities
     {
         public int ExamID { get; set; } // Birincil Anahtar
         public string Name { get; set; } // Örneğin: YKS, ALES
-        public DateTime? Year { get; set; } 
+        public DateTime? Year { get; set; }
 
-        // Bire-Çoğul İlişki: Exam -> Course
+        public int? Order { get; set; }
         public ICollection<Course> Courses { get; set; }
     }
 

@@ -19,6 +19,7 @@ namespace Domain.Entities
         public int CourseID { get; set; } // Hangi derse ait
         public Course Course { get; set; } // İlişki
 
+        public int? Order { get; set; }
         // Bire-Çoğul İlişki: Topic -> Test
         //public ICollection<Test> Tests { get; set; }
         public ICollection<TestGroup> TestGroups { get; set; } = new List<TestGroup>();

@@ -27,6 +27,13 @@ namespace Persistence.Repositories.Repository
                 .Where(t => t.CourseID == courseId)
                 .ToListAsync();
         }
+        public async Task<int> GetMaxOrderByCourseIdAsync(int courseId)
+        {
+            return await _context.Topics
+                .Where(t => t.CourseID == courseId)
+                .MaxAsync(t => (int?)t.Order) ?? 0;
+        }
+
 
     }
 }

@@ -28,7 +28,7 @@ namespace Application.Features.Mediator.Handlers.TestHandlers
 
             existingGroup.Title = request.Title;
             existingGroup.Description = request.Description;
-            existingGroup.test = request.test;
+            existingGroup.Order=request.Order;
 
             await _repository.UpdateAsync(existingGroup);
             return true;

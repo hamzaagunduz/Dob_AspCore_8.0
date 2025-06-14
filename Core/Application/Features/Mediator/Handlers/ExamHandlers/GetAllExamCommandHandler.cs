@@ -23,12 +23,18 @@ namespace Application.Features.Mediator.Handlers.ExamHandlers
         public async Task<List<GetAllExamQueryResult>> Handle(GetAllExamQuery request, CancellationToken cancellationToken)
         {
             var values = await _repository.GetAllAsync();
-            return values.Select(x => new GetAllExamQueryResult
-            {
-                ExamID = x.ExamID,
-                Name = x.Name,
-                Year = x.Year
-            }).ToList();
+
+            return values
+                .OrderBy(x => x.Order ?? int.MaxValue) // Order null ise en sona atar
+                .Select(x => new GetAllExamQueryResult
+                {
+                    ExamID = x.ExamID,
+                    Name = x.Name,
+                    Year = x.Year,
+                    Order=x.Order,
+                })
+                .ToList();
         }
+
     }
 }

@@ -12,6 +12,8 @@ namespace Application.Features.Mediator.Results.CourseResults
         public string Name { get; set; }
         public string? Description { get; set; }
         public string? IconURL { get; set; }
+        public int? Order { get; set; }
+
 
         public int ExamID { get; set; }
     }

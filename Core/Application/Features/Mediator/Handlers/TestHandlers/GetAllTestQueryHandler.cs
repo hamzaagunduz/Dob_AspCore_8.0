@@ -22,12 +22,17 @@ namespace Application.Features.Mediator.Handlers.TestHandlers
         public async Task<List<GetAllTestQueryResult>> Handle(GetAllTestQuery request, CancellationToken cancellationToken)
         {
             var tests = await _repository.GetAllAsync();
-            return tests.Select(test => new GetAllTestQueryResult
-            {
-                TestID = test.TestID,
-                Title = test.Title,
-                Description = test.Description,
-            }).ToList();
+
+            return tests
+                .OrderBy(t => t.Order ?? 0) // ✅ Order alanına göre sıralama
+                .Select(test => new GetAllTestQueryResult
+                {
+                    TestID = test.TestID,
+                    Title = test.Title,
+                    Description = test.Description,
+                })
+                .ToList();
         }
     }
+
 }

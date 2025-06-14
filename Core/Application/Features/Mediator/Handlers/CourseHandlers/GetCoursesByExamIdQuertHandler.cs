@@ -33,15 +33,20 @@ namespace Application.Features.Mediator.Handlers.CourseHandlers
 
             var courses = await _courseRepository.GetCoursesByExamIdAsync(user.ExamID.Value);
 
-            return courses.Select(course => new GetCoursesByExamIdQueryResult
-            {
-                CourseID = course.CourseID,
-                Name = course.Name,
-                Description = course.Description,
-                IconURL = course.IconURL,
-                ExamID = course.ExamID
-            }).ToList();
+            return courses
+                .OrderBy(c => c.Order ?? 0)  // Order'a göre sıralama eklendi
+                .Select(course => new GetCoursesByExamIdQueryResult
+                {
+                    CourseID = course.CourseID,
+                    Name = course.Name,
+                    Description = course.Description,
+                    IconURL = course.IconURL,
+                    ExamID = course.ExamID,
+                    Order = course.Order,
+                })
+                .ToList();
         }
+
     }
 
 }

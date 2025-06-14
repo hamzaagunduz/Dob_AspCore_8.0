@@ -24,6 +24,7 @@ namespace Application.Features.Mediator.Handlers.ExamHandlers
             var values = await _repository.GetByIdAsync(request.ExamID);
             values.Name = request.Name;
             values.Year= request.Year;
+            values.Order=request.Order;
             await _repository.UpdateAsync(values);
         }
     }

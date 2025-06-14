@@ -24,6 +24,7 @@ namespace Application.Features.Mediator.Handlers.TopicHandlers
                 topic.Name = request.Name;
                 topic.Description = request.Description;
                 topic.VideoLink = request.VideoLink;
+                topic.Order=request.Order;
                 //topic.CourseID = request.CourseID;
                 await _repository.UpdateAsync(topic);
             }

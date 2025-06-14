@@ -23,26 +23,39 @@ namespace Application.Features.Mediator.Handlers.TopicHandlers
         {
             var topics = await _topicRepository.GetTopicsWithTestsByCourseIdAsync(request.CourseId);
 
-            return topics.Select(topic => new GetTopicsWithGroupedTestsQueryResult
-            {
-                TopicID = topic.TopicID,
-                Name = topic.Name,
-                Description = topic.Description,
-                VideoLink = topic.VideoLink,
-                TestGroups = topic.TestGroups.Select(tg => new TestGroupDto
+            var orderedTopics = topics
+                .OrderBy(t => t.Order ?? 0) // Topic'leri Order'a göre sırala
+                .Select(topic => new GetTopicsWithGroupedTestsQueryResult
                 {
-                    TestGroupID = tg.TestGroupID,
-                    Title = tg.Title,
-                    Description = tg.Description,
-                    Tests = tg.Tests.Select(test => new TestDto
-                    {
-                        TestID = test.TestID,
-                        Title = test.Title,
-                        Description = test.Description
-                    }).ToList()
-                }).ToList()
-            }).ToList();
+                    TopicID = topic.TopicID,
+                    Name = topic.Name,
+                    Description = topic.Description,
+                    VideoLink = topic.VideoLink,
+                    Order = topic.Order,
+                    TestGroups = topic.TestGroups
+                        .OrderBy(tg => tg.Order ?? 0) // TestGroup'ları Order'a göre sırala
+                        .Select(tg => new TestGroupDto
+                        {
+                            TestGroupID = tg.TestGroupID,
+                            Title = tg.Title,
+                            Description = tg.Description,
+                            Order = tg.Order,
+                            Tests = tg.Tests
+                                .OrderBy(test => test.Order ?? 0) // Test'leri Order'a göre sırala
+                                .Select(test => new TestDto
+                                {
+                                    TestID = test.TestID,
+                                    Title = test.Title,
+                                    Description = test.Description,
+                                     Order = test.Order
+                                }).ToList()
+                        }).ToList()
+                }).ToList();
+
+            return orderedTopics;
         }
+
     }
+
 
 }

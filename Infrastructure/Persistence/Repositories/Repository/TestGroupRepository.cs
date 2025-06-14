@@ -33,5 +33,23 @@ namespace Persistence.Repositories.Repository
                 .ThenInclude(g => g.Topic)
                 .FirstOrDefaultAsync(t => t.TestID == testId);
         }
+
+        public async Task<int> GetMaxOrderByTestGroupIdAsync(int testGroupId)
+        {
+            var maxOrder = await _context.Tests
+                .Where(t => t.TestGroupID == testGroupId && t.Order.HasValue)
+                .MaxAsync(t => (int?)t.Order) ?? 0;
+
+            return maxOrder;
+        }
+
+        public async Task<int> GetMaxOrderByTopicIdAsync(int? topicId)
+        {
+            var maxOrder = await _context.TestGroups
+                .Where(tg => tg.TopicID == topicId && tg.Order.HasValue)
+                .MaxAsync(tg => (int?)tg.Order) ?? 0;
+
+            return maxOrder;
+        }
     }
 }

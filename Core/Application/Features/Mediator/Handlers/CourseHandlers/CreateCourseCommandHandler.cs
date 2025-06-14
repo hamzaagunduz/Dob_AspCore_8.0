@@ -1,5 +1,6 @@
 ﻿using Application.Features.Mediator.Commands.CourseCommands;
 using Application.Interfaces;
+using Application.Interfaces.ICourseRepository;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -13,21 +14,29 @@ namespace Application.Features.Mediator.Handlers.CourseHandlers
     public class CreateCourseCommandHandler : IRequestHandler<CreateCourseCommand>
     {
         private readonly IRepository<Course> _repository;
+        private readonly ICourseRepository _courseRepository;
 
-        public CreateCourseCommandHandler(IRepository<Course> repository)
+        public CreateCourseCommandHandler(IRepository<Course> repository, ICourseRepository courseRepository)
         {
             _repository = repository;
+            _courseRepository = courseRepository;
         }
 
         public async Task Handle(CreateCourseCommand request, CancellationToken cancellationToken)
         {
-            await _repository.CreateAsync(new Course
+            // Önce mevcut en yüksek Order değerini al
+            var maxOrder = await _courseRepository.GetMaxOrderByExamIdAsync(request.ExamID);
+
+            var newCourse = new Course
             {
                 Name = request.Name,
                 Description = request.Description,
                 IconURL = request.IconURL,
-                ExamID = request.ExamID
-            });
+                ExamID = request.ExamID,
+                Order = maxOrder + 1  // Bir sonrakini veriyoruz
+            };
+
+            await _repository.CreateAsync(newCourse);
         }
     }
 }

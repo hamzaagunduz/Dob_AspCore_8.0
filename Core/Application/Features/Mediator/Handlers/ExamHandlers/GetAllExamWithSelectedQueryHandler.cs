@@ -32,15 +32,19 @@ namespace Application.Features.Mediator.Handlers.ExamHandlers
 
             var exams = await _examRepository.GetAllAsync();
 
-            var result = exams.Select(exam => new GetAllExamWithSelectedQueryResult
-            {
-                ExamID = exam.ExamID,
-                Name = exam.Name,
-                Year = exam.Year,
-                IsSelected = selectedExamId.HasValue && exam.ExamID == selectedExamId.Value
-            }).ToList();
+            var result = exams
+                .OrderBy(e => e.Order ?? int.MaxValue) 
+                .Select(exam => new GetAllExamWithSelectedQueryResult
+                {
+                    ExamID = exam.ExamID,
+                    Name = exam.Name,
+                    Year = exam.Year,
+                    IsSelected = selectedExamId.HasValue && exam.ExamID == selectedExamId.Value
+                })
+                .ToList();
 
             return result;
+
         }
     }
 }
