@@ -197,6 +197,19 @@ namespace WebApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet("paginated")]
+        public async Task<IActionResult> GetPaginatedUsers(
+     [FromQuery] int pageNumber = 1,
+     [FromQuery] int pageSize = 10)
+        {
+            var result = await _mediator.Send(new GetAppUsersWithPaginationQuery
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            });
+            return Ok(result);
+        }
+
 
     }
 }

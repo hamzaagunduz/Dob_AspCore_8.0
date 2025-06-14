@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +12,12 @@ namespace Application.Interfaces.IAppUserRepository
         Task<int> GetTotalUserCountAsync();
         Task<int> GetTotalDiamondsAsync();
         Task<List<AppUserInfoDto>> GetLastFiveUsersAsync();
+        Task<(List<AppUser> Users, int TotalCount)> GetPagedUsersWithStatisticsAsync(
+    int pageNumber,
+    int pageSize);
 
     }
+
 
     public class AppUserInfoDto
     {

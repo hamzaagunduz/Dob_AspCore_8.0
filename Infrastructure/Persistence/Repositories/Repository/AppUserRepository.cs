@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.IAppUserRepository;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 using System;
@@ -40,6 +41,23 @@ namespace Persistence.Repositories.Repository
                     Email = u.Email
                 })
                 .ToListAsync();
+        }
+
+        public async Task<(List<AppUser> Users, int TotalCount)> GetPagedUsersWithStatisticsAsync(
+            int pageNumber,
+            int pageSize)
+        {
+            var query = _context.Users.AsQueryable();
+
+            int totalCount = await query.CountAsync();
+
+            var users = await query
+                .OrderBy(u => u.Id) // ID'ye göre sırala, istediğiniz alanı kullanabilirsiniz
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (users, totalCount);
         }
     }
 }
