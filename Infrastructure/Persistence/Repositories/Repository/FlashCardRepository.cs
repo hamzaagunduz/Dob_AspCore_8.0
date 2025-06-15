@@ -107,4 +107,43 @@ public class FlashCardRepository : IFlashCardRepository
     }
 
 
+    public async Task CreateUserCustomFlashCardAsync(UserCustomFlashCard entity)
+    {
+        // DB context ile kaydetme işlemi
+        _context.UserCustomFlashCards.Add(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateUserCustomFlashCardAsync(UserCustomFlashCard entity)
+    {
+        _context.UserCustomFlashCards.Update(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteUserCustomFlashCardAsync(UserCustomFlashCard entity)
+    {
+        _context.UserCustomFlashCards.Remove(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<UserCustomFlashCard> GetUserCustomFlashCardByIdAsync(int id)
+    {
+        return await _context.UserCustomFlashCards.FindAsync(id);
+    }
+
+    public async Task<List<UserCustomFlashCard>> GetUserCustomFlashCardsByUserAsync(int appUserId)
+    {
+        return await _context.UserCustomFlashCards
+            .Where(x => x.AppUserID == appUserId)
+            .ToListAsync();
+    }
+
+    public async Task<List<UserCustomFlashCard>> GetUserCustomFlashCardsByCourseAsync(int appUserId, int courseId)
+    {
+        return await _context.UserCustomFlashCards
+            .Where(c => c.AppUserID == appUserId && c.CourseID == courseId)
+            .ToListAsync();
+    }
+
+
 }

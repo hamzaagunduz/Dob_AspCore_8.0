@@ -25,6 +25,17 @@ namespace Application.Interfaces.IFlashCardRepository
         Task<List<FlashCard>> GetRandomFlashCardsByCourseAsync(int courseId, int count, int excludeFlashCardId);
 
 
+        //Custom FLash Card
+
+        Task<UserCustomFlashCard> GetUserCustomFlashCardByIdAsync(int id);
+        Task<List<UserCustomFlashCard>> GetUserCustomFlashCardsByUserAsync(int appUserId);
+        Task CreateUserCustomFlashCardAsync(UserCustomFlashCard entity);
+        Task UpdateUserCustomFlashCardAsync(UserCustomFlashCard entity);
+        Task DeleteUserCustomFlashCardAsync(UserCustomFlashCard entity);
+        Task<List<UserCustomFlashCard>> GetUserCustomFlashCardsByCourseAsync(int appUserId, int courseId);
+
+
+
 
     }
 }

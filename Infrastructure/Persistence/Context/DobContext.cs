@@ -34,6 +34,8 @@ namespace Persistence.Context
         public DbSet<DiamondPackItem> DiamondPackItems { get; set; }
         public DbSet<UserLoginHistory> UserLoginHistories { get; set; }
         public DbSet<AppUserFlashCard> AppUserFlashCards { get; set; }
+        public DbSet<UserCustomFlashCard> UserCustomFlashCards { get; set; }
+
 
 
 

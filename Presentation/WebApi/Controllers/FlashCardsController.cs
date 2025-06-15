@@ -4,6 +4,7 @@ using Application.Features.Mediator.Queries.FlashCardQuery;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace WebApi.Controllers
@@ -97,19 +98,23 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("favorites/bycourse")]
-        public async Task<IActionResult> GetUserFavoriteFlashCardsByCourse([FromQuery] int courseId)
+        public async Task<IActionResult> GetUserFavoriteFlashCardsByCourse(
+            [FromQuery] int courseId,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            // Token'dan userId al
-            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!int.TryParse(userIdClaim, out int appUserId))
                 return Unauthorized("Geçersiz token veya kullanıcı bulunamadı.");
 
-            // Query objesini token'dan alınan userId ve gelen courseId ile oluştur
-            var query = new GetUserFavoriteFlashCardsByCourseQuery(appUserId, courseId);
+            var query = new GetUserFavoriteFlashCardsByCourseQuery(
+                appUserId,
+                courseId,
+                pageNumber,
+                pageSize
+            );
 
-            // MediatR ile işle
             var result = await _mediator.Send(query);
-
             return Ok(result);
         }
 
