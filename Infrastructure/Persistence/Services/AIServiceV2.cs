@@ -2,11 +2,17 @@
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel;
-using WebApi.Hubs;
+using Persistence.Hubs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Persistence.Models;
 
-namespace WebApi.Services
+namespace Persistence.Services
 {
-    public class AIService(IHubContext<AIHub> hubContext, IChatCompletionService chatCompletionService, Kernel kernel)
+    public class AIServiceV2(IHubContext<AIHubV2> hubContext, IChatCompletionService chatCompletionService, Kernel kernel)
     {
         public async Task GetMessageStreamAsync(string prompt, string connectionId, CancellationToken? cancellationToken = default!)
         {
@@ -15,9 +21,8 @@ namespace WebApi.Services
                 FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
             };
 
-            var history = HistoryService.GetChatHistory(connectionId);
+            var history = HistoryServiceV2.GetChatHistory(connectionId);
 
-            // Şıksız soru için öğretici açıklama şablonu
             string formattedPrompt = $"""
             Aşağıdaki soruyu detaylı ve öğretici bir şekilde adım adım yanıtla.
             - Önce soruyu analiz et,
@@ -42,21 +47,17 @@ namespace WebApi.Services
             }
             catch (Exception ex)
             {
-                // Hatalar loglanabilir
                 Console.WriteLine($"Hata oluştu: {ex.Message}");
             }
 
             history.AddAssistantMessage(responseContent);
         }
 
-
-
-
         public async Task<string> GetMessageAsync(string prompt, CancellationToken? cancellationToken = default!)
         {
             try
             {
-                var history = HistoryService.GetChatHistory("some-connection-id");
+                var history = HistoryServiceV2.GetChatHistory("some-connection-id");
                 history.AddUserMessage(prompt);
 
                 OpenAIPromptExecutionSettings settings = new()
@@ -71,20 +72,17 @@ namespace WebApi.Services
                     cancellationToken: cancellationToken ?? CancellationToken.None);
 
                 string result = response?.Content ?? "";
-
                 history.AddAssistantMessage(result);
 
                 return result;
             }
             catch (Exception ex)
             {
-                // Hata varsa string olarak dönebilirsin ya da throw edebilirsin.
                 return $"Hata: {ex.Message}";
             }
         }
 
-
-        public async Task<Dictionary<string, string>> GetAnalysisSuggestionsAsync(ViewModels.AnalysisRequestVM request)
+        public async Task<Dictionary<string, string>> GetAnalysisSuggestionsAsync(AnalysisRequestVMV2 request)
         {
             var results = new Dictionary<string, string>();
 
@@ -110,7 +108,5 @@ namespace WebApi.Services
 
             return results;
         }
-
-
     }
 }

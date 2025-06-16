@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DobContext))]
-    partial class DobContextModelSnapshot : ModelSnapshot
+    [Migration("20250616184731_aiconfig")]
+    partial class aiconfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -360,35 +363,6 @@ namespace Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("FlashCards");
-                });
-
-            modelBuilder.Entity("Domain.Entities.IyzipaySetting", b =>
-                {
-                    b.Property<int>("IyzipaySettingID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IyzipaySettingID"));
-
-                    b.Property<string>("ApiKey")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BaseUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CallbackUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SecretKey")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IyzipaySettingID");
-
-                    b.ToTable("IyzipaySettings");
                 });
 
             modelBuilder.Entity("Domain.Entities.Question", b =>

@@ -14,21 +14,40 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using Azure.Core;
 using Microsoft.Extensions.Options;
+using Persistence.Providers;
 
 namespace Persistence.Services
 {
     public class PaymentService : IPaymentService
     {
         private readonly IHubContext<PayHub> _hubContext;
-        Iyzipay.Options options = new()
-        {
-            ApiKey = "sandbox-NOZ4xKWVStD11ryygd9WFNtwVX3pftih",
-            SecretKey = "sandbox-NdKhyJ3pCMqGzYpC2ThagRDSTNFLiXUu",
-            BaseUrl = "https://sandbox-api.iyzipay.com"
-        };
-        public PaymentService(IHubContext<PayHub> hubContext)
+        private readonly IyzipaySettingsProvider _settingsProvider;
+        private Iyzipay.Options _options;
+        private string? _callbackUrl;
+
+
+        public PaymentService(IHubContext<PayHub> hubContext, IyzipaySettingsProvider settingsProvider)
         {
             _hubContext = hubContext;
+            _settingsProvider = settingsProvider;
+        }
+
+        private async Task<Iyzipay.Options> GetOptionsAsync()
+        {
+            if (_options != null && _callbackUrl != null)
+                return _options;
+
+            var settings = await _settingsProvider.GetSettingsAsync();
+
+            _options = new Iyzipay.Options
+            {
+                ApiKey = settings.ApiKey,
+                SecretKey = settings.SecretKey,
+                BaseUrl = settings.BaseUrl
+            };
+
+            _callbackUrl = settings.CallbackUrl;
+            return _options;
         }
 
         public async Task<CreatePaymentResult> CreatePaymentAsync(
@@ -38,7 +57,8 @@ namespace Persistence.Services
             string expireYear,
             string cvc)
         {
-  
+
+            var options = await GetOptionsAsync();
 
             CreatePaymentRequest request = new CreatePaymentRequest();
             request.Locale = Locale.TR.ToString();
@@ -50,7 +70,7 @@ namespace Persistence.Services
             request.BasketId = "B67832";
             request.PaymentChannel = PaymentChannel.WEB.ToString();
             request.PaymentGroup = PaymentGroup.PRODUCT.ToString();
-            request.CallbackUrl = "https://localhost:7172/api/Payments/PayCallBack";
+            request.CallbackUrl = _callbackUrl;
 
             PaymentCard paymentCard = new PaymentCard();
             paymentCard.CardHolderName = cardHolderName;
@@ -140,6 +160,7 @@ namespace Persistence.Services
             request.ConversationId = callbackData.ConversationId;
             request.PaymentId = callbackData.PaymentId;
             request.ConversationData = callbackData.ConversationData;
+            var options = await GetOptionsAsync();
 
             ThreedsPayment threedsPayment = await ThreedsPayment.Create(request, options);
 

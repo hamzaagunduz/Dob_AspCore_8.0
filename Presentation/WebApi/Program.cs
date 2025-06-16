@@ -34,15 +34,13 @@ using OpenAI;
 using Persistence.Context;
 using Persistence.Hubs;
 using Persistence.Identity;
+using Persistence.Providers;
 using Persistence.Repositories;
 using Persistence.Repositories.Repository;
 using Persistence.Repositories.Repository.Infrastructure.Persistence.Repositories;
 using Persistence.Services;
 using System.ClientModel;
 using System.Text;
-using WebApi.Hubs;
-using WebApi.Services;
-using static WebApi.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,21 +50,35 @@ builder.Services.AddEndpointsApiExplorer()
     .AddProblemDetails();
 
 builder.Services.AddSignalR();
-builder.Services.AddSingleton<AIService>();
 
+
+builder.Services.AddDbContext<DobContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+
+builder.Services.AddScoped<AIServiceV2>();
+builder.Services.AddScoped<IyzipaySettingsProvider>();
+
+builder.Services.AddScoped<AIConfigurationProvider>();
+
+var provider = builder.Services.BuildServiceProvider();
+var aiConfigProvider = provider.GetRequiredService<AIConfigurationProvider>();
+var aiConfig = await aiConfigProvider.GetConfigAsync(); 
 
 builder.Services
     .AddKernel()
     .AddOpenAIChatCompletion(
-        modelId: "google/gemini-flash-1.5-8b",
+        modelId: aiConfig.ModelId,
         openAIClient: new OpenAIClient(
-            credential: new ApiKeyCredential("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"),
+            credential: new ApiKeyCredential(aiConfig.ApiKey),
             options: new OpenAIClientOptions
             {
-                Endpoint = new Uri("https://openrouter.ai/api/v1")
+                Endpoint = new Uri(aiConfig.Endpoint)
             })
     );
-   
+
 
 //builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
@@ -104,10 +116,6 @@ builder.Services.AddSwaggerGen(c =>
 
 
 
-builder.Services.AddDbContext<DobContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
 
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -270,17 +278,17 @@ app.UseHttpsRedirection();
 app.UseAuthentication();  // Add this line to ensure authentication middleware is used
 app.UseAuthorization();
 
-app.MapHub<AIHub>("ai-hub");
 app.MapHub<PayHub>("/payHub");
+app.MapHub<AIHubV2>("aihubv2");
 
 app.MapControllers();
 
 
 
-app.MapPost("/chat2", async (AIService aiService, ChatRequestVM request) =>
-{
-    string response = await aiService.GetMessageAsync(request.Prompt);
-    return Results.Ok(new { Message = response });
-});
+//app.MapPost("/chat2", async (AIService aiService, ChatRequestVM request) =>
+//{
+//    string response = await aiService.GetMessageAsync(request.Prompt);
+//    return Results.Ok(new { Message = response });
+//});
 
 app.Run();

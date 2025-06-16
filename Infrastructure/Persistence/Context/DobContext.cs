@@ -33,6 +33,9 @@ namespace Persistence.Context
         public DbSet<UserLoginHistory> UserLoginHistories { get; set; }
         public DbSet<AppUserFlashCard> AppUserFlashCards { get; set; }
         public DbSet<UserCustomFlashCard> UserCustomFlashCards { get; set; }
+        public DbSet<AISetting> AISettings { get; set; }
+        public DbSet<IyzipaySetting> IyzipaySettings { get; set; }
+
 
 
 
