@@ -11,10 +11,8 @@ namespace Persistence.Context
 {
     public class DobContext:IdentityDbContext<AppUser, AppRole, int>
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public DobContext(DbContextOptions<DobContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-O82KITD;initial Catalog=DobDb;integrated Security=true; TrustServerCertificate=True");
-
         }
 
         public DbSet<About> Abouts { get; set; }

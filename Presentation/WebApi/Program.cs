@@ -26,6 +26,7 @@ using Domain.Entities;
 using Infrastructure.Persistence.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.SemanticKernel;
@@ -103,7 +104,11 @@ builder.Services.AddSwaggerGen(c =>
 
 
 
-builder.Services.AddScoped<DobContext>();
+builder.Services.AddDbContext<DobContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IExamRepository), typeof(ExamRepository));
@@ -136,9 +141,23 @@ builder.Services.AddHostedService<ResetUserDailyMissionsService>();
 builder.Services.AddApplicationService(builder.Configuration);
 
 
-builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
-    policy.WithOrigins("http://localhost:5173", "https://localhost:5173", "https://localhost:7172", "http://localhost:4173").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
-));
+var corsOrigins = builder.Configuration.GetSection("Cors:Origins").Get<string[]>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins(corsOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+
+        // Sadece Development ortamýnda AllowCredentials eklenebilir
+        if (builder.Environment.IsDevelopment())
+        {
+            policy.AllowCredentials();
+        }
+    });
+});
 
 
 builder.Services.AddIdentity<AppUser, AppRole>(options =>
