@@ -361,3 +361,12 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# ASP.NET Core ortam konfigürasyonları (gizli bilgiler içerir)
+**/appsettings.*.json
+!**/appsettings.json         # Genel yapılandırmayı tutmak istiyorsan açık bırak
+
+# Ortam değişkeni dosyaları (.NET 7+ ve frontend entegrasyonları için)
+.env
+.env.*
+!.env.example
