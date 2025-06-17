@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  dobapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dobaspnetapp:latest
+    container_name: dobapi
+    ports:
+      - "5000:80"
+    volumes:
+      - ./question-images:/app/wwwroot/question-images
+    restart: unless-stopped
