@@ -224,6 +224,10 @@ builder.Services.AddAuthentication(options =>
 
 
 builder.Services.AddHttpContextAccessor();
+if (builder.Environment.IsProduction())
+{
+    builder.WebHost.UseUrls("http://0.0.0.0:80"); // Sadece Docker'da çalýþýr
+}
 
 
 
@@ -273,7 +277,11 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 app.UseStaticFiles();  // wwwroot altýndaki dosyalarý açar
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 
 app.UseAuthentication();  // Add this line to ensure authentication middleware is used
 app.UseAuthorization();
@@ -285,10 +293,6 @@ app.MapControllers();
 
 
 
-//app.MapPost("/chat2", async (AIService aiService, ChatRequestVM request) =>
-//{
-//    string response = await aiService.GetMessageAsync(request.Prompt);
-//    return Results.Ok(new { Message = response });
-//});
+
 
 app.Run();
