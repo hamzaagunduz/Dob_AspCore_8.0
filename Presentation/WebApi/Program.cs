@@ -277,10 +277,10 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 app.UseStaticFiles();  // wwwroot altýndaki dosyalarý açar
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+//if (!app.Environment.IsDevelopment())
+//{
+//    app.UseHttpsRedirection();
+//}
 
 
 app.UseAuthentication();  // Add this line to ensure authentication middleware is used
@@ -294,5 +294,6 @@ app.MapControllers();
 
 
 
+app.MapGet("/", () => "API is running");
 
 app.Run();
