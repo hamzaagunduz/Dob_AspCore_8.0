@@ -13,7 +13,6 @@ namespace Application.Features.Mediator.Results.DashboardQueryResult
         public double AverageTestCompletion { get; set; }
         public int TotalDiamonds { get; set; }
 
-        public SystemInfo SystemInfo { get; set; } = new();
         public List<WeeklyActiveUserData> WeeklyActiveUsers { get; set; } = new();
 
         public List<LastFiveUserDto> LastFiveUsers { get; set; } = new();

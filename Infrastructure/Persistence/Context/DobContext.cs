@@ -37,6 +37,14 @@ namespace Persistence.Context
         public DbSet<IyzipaySetting> IyzipaySettings { get; set; }
 
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<AppUser>()
+                .HasIndex(u => u.Email)
+                .IsUnique(); 
+        }
 
 
 

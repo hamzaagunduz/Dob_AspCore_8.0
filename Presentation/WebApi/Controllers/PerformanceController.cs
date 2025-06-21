@@ -38,7 +38,7 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpGet("performance")] // userId artık yok URL'de
+        [HttpGet("performance")] 
         public async Task<IActionResult> GetPerformance([FromQuery] string range)
         {
             // Token'dan userId alıyoruz

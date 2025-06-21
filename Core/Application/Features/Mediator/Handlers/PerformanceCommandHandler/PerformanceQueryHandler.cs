@@ -23,26 +23,34 @@ namespace Application.Features.Mediator.Handlers.PerformanceCommandHandler
 
         public async Task<PerformanceQueryResult> Handle(PerformanceQuery request, CancellationToken cancellationToken)
         {
+            // Türkiye saat dilimi
+            var turkeyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
+            var turkeyNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, turkeyTimeZone);
+
             DateTime fromDate = request.Range switch
             {
-                "daily" => DateTime.Today,
-                "weekly" => DateTime.Now.AddDays(-7),
-                "monthly" => DateTime.Now.AddMonths(-1),
+                "daily" => turkeyNow.Date,
+                "weekly" => turkeyNow.Date.AddDays(-7),
+                "monthly" => turkeyNow.Date.AddMonths(-1),
                 _ => DateTime.MinValue
             };
+
+            DateTime? toDate = null;
+            if (request.Range == "daily")
+            {
+                toDate = fromDate.AddDays(1); // Ertesi gün
+            }
 
             IQueryable<UserTopicPerformance> query = _performanceRepository
                 .GetQueryable()
                 .Where(p => p.AppUserId == request.userId && p.CompletedAt >= fromDate);
 
-            if (request.Range == "daily")
+            if (toDate.HasValue)
             {
-                var tomorrow = DateTime.Today.AddDays(1);
-                query = query.Where(p => p.CompletedAt < tomorrow);
+                query = query.Where(p => p.CompletedAt < toDate.Value);
             }
 
-            var performances = await query
-                .ToListAsync(cancellationToken);
+            var performances = await query.ToListAsync(cancellationToken);
 
             var result = new PerformanceQueryResult
             {
@@ -65,5 +73,6 @@ namespace Application.Features.Mediator.Handlers.PerformanceCommandHandler
 
             return result;
         }
+
     }
 }

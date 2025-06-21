@@ -1,7 +1,6 @@
 ﻿using Application.Features.Mediator.Queries.DashboardQuery;
 using Application.Features.Mediator.Results.DashboardQueryResult;
 using Application.Interfaces.IAppUserRepository;
-using Application.Interfaces.ISystemMetricsService.cs;
 using Application.Interfaces.IUserLoginHistoryRepository;
 using Application.Interfaces.IUserStatisticsRepository;
 using MediatR;
@@ -19,24 +18,20 @@ namespace Application.Features.Mediator.Handlers.DashboardHandlers
         private readonly IAppUserRepository _appUserRepository;
         private readonly IUserLoginHistoryRepository _loginHistoryRepository;
         private readonly IUserStatisticsRepository _statisticsRepository;
-        private readonly ISystemMetricsService _systemMetricsService;
 
         public DashboardQueryHandler(
             IAppUserRepository appUserRepository,
             IUserLoginHistoryRepository loginHistoryRepository,
-            IUserStatisticsRepository statisticsRepository,
-            ISystemMetricsService systemMetricsService)
+            IUserStatisticsRepository statisticsRepository)
         {
             _appUserRepository = appUserRepository;
             _loginHistoryRepository = loginHistoryRepository;
             _statisticsRepository = statisticsRepository;
-            _systemMetricsService = systemMetricsService;
         }
 
         public async Task<DashboardQueryResult> Handle(DashboardQuery request, CancellationToken cancellationToken)
         {
             var weeklyData = await _loginHistoryRepository.GetWeeklyActiveUsersAsync();
-            var systemMetrics = await _systemMetricsService.GetSystemMetricsAsync();
             var lastFiveUsers = await _appUserRepository.GetLastFiveUsersAsync(); // ⬅️ BURASI
 
             return new DashboardQueryResult
@@ -47,13 +42,7 @@ namespace Application.Features.Mediator.Handlers.DashboardHandlers
                 TotalDiamonds = await _appUserRepository.GetTotalDiamondsAsync(),
 
 
-                SystemInfo = new SystemInfo
-                {
-                    CpuUsage = systemMetrics.CpuUsage,
-                    MemoryUsage = systemMetrics.MemoryUsage,
-                    DiskUsage = systemMetrics.DiskUsage,
-                    NetworkUsage = systemMetrics.NetworkUsage
-                },
+      
 
                 WeeklyActiveUsers = weeklyData.Select(kvp => new WeeklyActiveUserData
                 {

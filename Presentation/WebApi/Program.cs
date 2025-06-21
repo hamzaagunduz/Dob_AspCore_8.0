@@ -157,8 +157,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(corsOrigins)
               .AllowAnyHeader()
-              .AllowAnyMethod();
-
+              .AllowAnyMethod()
+              .AllowCredentials();
         // Sadece Development ortamýnda AllowCredentials eklenebilir
         if (builder.Environment.IsDevelopment())
         {
@@ -240,6 +240,16 @@ if (builder.Environment.IsProduction())
 
 var app = builder.Build();
 
+if (app.Environment.IsProduction())
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<DobContext>();
+        dbContext.Database.Migrate();
+    }
+}
+
+
 // Roll seed etmek için
 //async Task SeedRolesAsync(IServiceProvider serviceProvider)
 //{
@@ -286,7 +296,7 @@ app.UseStaticFiles();  // wwwroot altýndaki dosyalarý açar
 app.UseAuthentication();  // Add this line to ensure authentication middleware is used
 app.UseAuthorization();
 
-app.MapHub<PayHub>("/payHub");
+app.MapHub<PayHub>("payHub");
 app.MapHub<AIHubV2>("aihubv2");
 
 app.MapControllers();

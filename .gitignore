@@ -372,4 +372,7 @@ FodyWeavers.xsd
 !.env.example
 
 appsettings.Production.json
+**/appsettings.Production.json
+Presentation/WebApi/appsettings.Production.json
+
 

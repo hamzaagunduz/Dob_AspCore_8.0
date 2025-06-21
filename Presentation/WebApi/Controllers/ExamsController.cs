@@ -79,6 +79,32 @@ namespace WebApi.Controllers
             return Ok(result);
         }
 
+
+
+        [HttpGet("docker-test")]
+        public async Task<IActionResult> docker()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized(new { error = "Geçersiz token veya kullanıcı bulunamadı." });
+
+            var result = await _mediator.Send(new GetAllExamWithSelectedQuery { UserId = userId });
+            return Ok(result);
+        }
+
+        [HttpGet("docker-test2")]
+        public async Task<IActionResult> docker2()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized(new { error = "Geçersiz token veya kullanıcı bulunamadı." });
+
+            var result = await _mediator.Send(new GetAllExamWithSelectedQuery { UserId = userId });
+            return Ok(result);
+        }
+
     }
 }
 
