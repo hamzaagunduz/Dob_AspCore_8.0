@@ -21,4 +21,9 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Mediator\Queries\ContactQuery\" />
+    <Folder Include="Features\Mediator\Results\ContactResults\" />
+  </ItemGroup>
+
 </Project>

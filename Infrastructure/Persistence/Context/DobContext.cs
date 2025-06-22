@@ -35,6 +35,7 @@ namespace Persistence.Context
         public DbSet<UserCustomFlashCard> UserCustomFlashCards { get; set; }
         public DbSet<AISetting> AISettings { get; set; }
         public DbSet<IyzipaySetting> IyzipaySettings { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
